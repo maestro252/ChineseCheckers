@@ -33,8 +33,9 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
         tablero = new JButton[8][8];
         
         PanelTablero = new JPanel(new GridLayout(8,8));
-        
         PanelTablero.setBounds(0,0,640,640);
+        PanelTablero.setBorder(BorderFactory.createLineBorder(Color.black));
+        
         
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
@@ -43,13 +44,23 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
                 tablero[i][j].setBounds(0, 0, 80, 80);
                 boolean a = false;
                 if(i%2==0&&j%2!=0){
-                    tablero[i][j].setBackground(new Color(Integer.parseInt("a75e2b",16)));
+                    //Las fichas tratar de hacerlas como barcos, pues con azul y verde el tablera simula el mar.
+                    //tablero[i][j].setBackground(new Color(Integer.parseInt("a75e2b",16)));
+                    tablero[i][j].setBackground(Color.green);
+                    tablero[i][j].setOpaque(true);
+                    tablero[i][j].setBorderPainted(false);
                 }else{
-                    tablero[i][j].setBackground(new Color(Integer.parseInt("ffc86c",16)));
+                    //tablero[i][j].setBackground(new Color(Integer.parseInt("ffc86c",16)));
+                    tablero[i][j].setBackground(Color.blue);
+                    tablero[i][j].setOpaque(true);
+                    tablero[i][j].setBorderPainted(false);
                 }
                 if(i==1||i==3||i==5||i==7){
                     if(j==0||j==2||j==4||j==6){
-                        tablero[i][j].setBackground(new Color(Integer.parseInt("a75e2b",16)));
+                       //tablero[i][j].setBackground(new Color(Integer.parseInt("a75e2b",16)));
+                       tablero[i][j].setBackground(Color.green);
+                       tablero[i][j].setOpaque(true);
+                       tablero[i][j].setBorderPainted(false);
                     }
                 }
                 PanelTablero.add(tablero[i][j]);
