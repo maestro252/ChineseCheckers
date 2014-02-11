@@ -38,6 +38,7 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
         
         PanelTablero = new JPanel(new GridLayout(8,8));
         PanelTablero.setBounds(0,0,640,640);
+        PanelTablero.setBorder(BorderFactory.createLineBorder(Color.black));
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
                 tablero[i][j]=new JButton();
