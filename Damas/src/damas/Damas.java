@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package damas;
+//package images;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,9 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
     JPanel botones;
     JButton tablero[][];
     JPanel PanelTablero;
+    ImageIcon negra = new ImageIcon("src//images//fNegra1.jpg");
+    ImageIcon blanca = new ImageIcon("src//images//fBlanca.jpeg");
+    JButton ensayo;
     
     public Damas(){
         
@@ -34,9 +38,6 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
         
         PanelTablero = new JPanel(new GridLayout(8,8));
         PanelTablero.setBounds(0,0,640,640);
-        PanelTablero.setBorder(BorderFactory.createLineBorder(Color.black));
-        
-        
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
                 tablero[i][j]=new JButton();
@@ -45,29 +46,54 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
                 boolean a = false;
                 if(i%2==0&&j%2!=0){
                     //Las fichas tratar de hacerlas como barcos, pues con azul y verde el tablera simula el mar.
-                    //tablero[i][j].setBackground(new Color(Integer.parseInt("a75e2b",16)));
-                    tablero[i][j].setBackground(Color.green);
+                    tablero[i][j].setBackground(new Color(Integer.parseInt("a75e2b",16)));
+                    //tablero[i][j].setBackground(Color.green);
                     tablero[i][j].setOpaque(true);
                     tablero[i][j].setBorderPainted(false);
                 }else{
-                    //tablero[i][j].setBackground(new Color(Integer.parseInt("ffc86c",16)));
-                    tablero[i][j].setBackground(Color.blue);
+                    tablero[i][j].setBackground(new Color(Integer.parseInt("ffc86c",16)));
+                    //tablero[i][j].setBackground(Color.blue);
                     tablero[i][j].setOpaque(true);
                     tablero[i][j].setBorderPainted(false);
                 }
                 if(i==1||i==3||i==5||i==7){
                     if(j==0||j==2||j==4||j==6){
-                       //tablero[i][j].setBackground(new Color(Integer.parseInt("a75e2b",16)));
-                       tablero[i][j].setBackground(Color.green);
-                       tablero[i][j].setOpaque(true);
-                       tablero[i][j].setBorderPainted(false);
+                        tablero[i][j].setBackground(new Color(Integer.parseInt("a75e2b",16)));
+                        //tablero[i][j].setBackground(Color.green);
+                        tablero[i][j].setOpaque(true);
+                        tablero[i][j].setBorderPainted(false);
                     }
                 }
+                
                 PanelTablero.add(tablero[i][j]);
                 tablero[i][j].addActionListener(this);
             }
         }
         
+        for(int i=0; i <= 2; i++){
+            for(int j=0; j<=7; j++){
+                if(i%2 == 0 && j%2 != 0){
+                    tablero[i][j].setIcon(negra);
+                }else{
+                    if(i%2 != 0 && j%2 == 0){
+                        tablero[i][j].setIcon(negra);
+                    }
+                }
+                
+            }
+        }
+         for(int i=5; i <= 7; i++){
+            for(int j=0; j<=7; j++){
+                if(i%2 != 0 && j%2 == 0){
+                    tablero[i][j].setIcon(blanca);
+                }else{
+                    if(i%2 == 0 && j%2 != 0){
+                        tablero[i][j].setIcon(blanca);
+                    }
+                }
+                
+            }
+        }
         getContentPane().add(PanelTablero);
         
         btnRegistro = new JButton("Registro");
