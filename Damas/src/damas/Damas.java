@@ -5,6 +5,7 @@
 package damas;
 //package images;
 
+import static damas.Juego.matriz;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -21,9 +22,15 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
     JPanel botones;
     JButton tablero[][];
     JPanel PanelTablero;
-    ImageIcon negra = new ImageIcon("src//images//fNegra1.jpg");
-    ImageIcon blanca = new ImageIcon("src//images//fBlanca.jpeg");
+    ImageIcon negra = new ImageIcon("src//images//fNegra.png");
+    ImageIcon blanca = new ImageIcon("src//images//fBlanca.png");
     JButton ensayo;
+    Juego matriz;
+    Juego maquina;
+    int contador = 0; //para llevar el numero de clicks.
+    String partida;
+    String llegada;
+    int mat[][];
     
     public Damas(){
         
@@ -95,6 +102,7 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
                 
             }
         }
+        maquina = new Juego(tablero);
         getContentPane().add(PanelTablero);
         
         btnRegistro = new JButton("Registro");
@@ -124,6 +132,30 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
         setVisible(true);
         
     }
+    
+    public void sincronizarMat(){
+        mat = maquina.getMat();
+        for(int i=0; i <= 7; i++){
+            for(int j=0; j<=7; j++){
+                if(mat[i][j]==1){
+                    tablero[i][j].setIcon(blanca);
+                }
+                else if(mat[i][j]==2){
+                    //ojo poner la imagen de la blanca reina
+                    tablero[i][j].setIcon(negra);
+                }
+                else if(mat[i][j]==3){
+                    tablero[i][j].setIcon(negra);
+                }
+                else if(mat[i][j]==4){
+                    //ojo poner imagen de la reina negra.
+                    tablero[i][j].setIcon(blanca);
+                }else if(mat[i][j] == 0){
+                    tablero[i][j].setIcon(null);
+                }
+            }
+        }
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -152,7 +184,51 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        contador++;
         System.out.println(e.getActionCommand());
+        if(contador %2 != 0){
+        partida = e.getActionCommand();
+        }else{
+            int tipo = 0;
+            String text;
+            int i = Integer.parseInt(partida.charAt(0) + "");
+            int j = Integer.parseInt(partida.charAt(1) + "");
+            
+            if(tablero[i][j].getIcon()!=null){
+                    text = tablero[i][j].getIcon().toString();
+                    if(text.equals("src//images//fNegra.png")){
+                        tipo = 3;
+                    }
+                    else if(text.equals("src//images//fNegra2.png")){
+                        tipo = 4;
+                    }
+                    else if(text.equals("src//images//fBlanca.png")){
+                        tipo = 1;
+                    }
+                    else if(text.equals("src//images//fBlancaR.png")){
+                        tipo = 2;
+                    }
+                }
+            llegada = e.getActionCommand();
+            try{
+                maquina.validarJugada(tipo, partida, llegada);
+                int k = Integer.parseInt(partida.charAt(0) + "");
+                int l = Integer.parseInt(partida.charAt(1) + "");
+                tablero[k][l].setIcon(null);
+            }catch(Exception x){
+                System.out.println(x.getMessage());
+            }
+            
+        }
+        
+        sincronizarMat();
+        for(int i=0; i <= 7; i++){
+            for(int j=0; j<=7; j++){
+                System.out.print(mat[i][j]);
+            }
+            System.out.println("");
+        }
+        repaint();
     }
     
     
