@@ -83,15 +83,15 @@ public class Juego {
        int yf = Integer.parseInt(llegada.charAt(1) + "");
        boolean valida = true;
        if(tipo == 1){ //en caso de que la ficha sea blanca (esta en la parte de abajo del tablero.)
-        if(yf <= yi){ // ojo antes era menor o igual
+        if(xf >= xi){ // ojo antes era menor o igual
             valida = false; // las fichas blancas normales solo se pueden mover hacia adelante.
             throw new Exception("La ficha solo se puede mover hacia adelante, pues no es una Reina.");
         }
-        if(xf == xi){
+        if(yf == yi){
             valida = false; // las fichas solo se pueden mover en diagonal.
             throw new Exception("Debe mover la ficha tambien en las columnas, la jugada debe ser en diagonal.");
 
-        }else if(Math.abs(xf - xi) == 1 && yf - yi == 1){ //si movio una coordenada en x y una en y. ojo decia -1
+        }else if(xf - xi == -1 && Math.abs(yf - yi) == 1){ //si movio una coordenada en x y una en y. ojo decia -1
             if(matriz[xf][yf] == 1 || matriz[xf][yf] == 2 || matriz[xf][yf] == 3 || matriz[xf][yf] == 4){
                 valida = false;
                 throw new Exception("La posición de destino esta ocupada, mueva a otra coordenada.");
@@ -99,12 +99,12 @@ public class Juego {
                 matriz[xi][yi] = 0; // hizo una movida sencilla a izquierda o a derecha.
                 matriz[xf][yf] = 1;
             }
-        }else{
+        }else {
              valida = false;
             throw new Exception("Debe mover hacia la izquierda o derecha y hacia adelante unicamente.");
             
         }
-        if(Math.abs(xf - xi) == 2 && yf - yi == -2){ // si movio dos en y dos en x, hay que revisar si comio algo.
+        if(xf - xi == 2 && Math.abs(yf - yi) == -2){ // si movio dos en y dos en x, hay que revisar si comio algo.
             if(matriz[xf - 1][yf - 1] == 3 || matriz[xf - 1][yf - 1] == 4){
                 if(matriz[xf - 1][yf - 1] != 1 && matriz[xf - 1][yf - 1] != 2){
                 
