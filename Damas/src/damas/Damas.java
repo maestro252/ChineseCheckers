@@ -24,6 +24,8 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
     JPanel PanelTablero;
     ImageIcon negra = new ImageIcon("src//images//fNegra.png");
     ImageIcon blanca = new ImageIcon("src//images//fBlanca.png");
+    ImageIcon blancaR = new ImageIcon("src//images//fBlancaR.png");
+    ImageIcon negraR = new ImageIcon("src//images//fNegraR.png");
     JButton ensayo;
     Juego matriz;
     Juego maquina;
@@ -142,14 +144,14 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
                 }
                 else if(mat[i][j]==2){
                     //ojo poner la imagen de la blanca reina
-                    tablero[i][j].setIcon(negra);
+                    tablero[i][j].setIcon(blancaR);
                 }
                 else if(mat[i][j]==3){
                     tablero[i][j].setIcon(negra);
                 }
                 else if(mat[i][j]==4){
                     //ojo poner imagen de la reina negra.
-                    tablero[i][j].setIcon(blanca);
+                    tablero[i][j].setIcon(negraR);
                 }else if(mat[i][j] == 0){
                     tablero[i][j].setIcon(null);
                 }
@@ -199,7 +201,7 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
                     if(text.equals("src//images//fNegra.png")){
                         tipo = 3;
                     }
-                    else if(text.equals("src//images//fNegra2.png")){
+                    else if(text.equals("src//images//fNegraR.png")){
                         tipo = 4;
                     }
                     else if(text.equals("src//images//fBlanca.png")){
