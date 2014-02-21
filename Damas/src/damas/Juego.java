@@ -15,6 +15,7 @@ import javax.swing.JButton;
 public class Juego {
     
     public static int matriz[][];
+    public static int turno = 0;
     public static int blanca, negra, Rblanca, Rnegra;
     JButton tablero[][];
     public Juego(JButton tablero[][]) {
@@ -62,28 +63,29 @@ public class Juego {
         
     }
     public boolean validarJugada (int tipo, String inicial, String llegada) throws Exception{
-       /*
-        Esta es la lista de todas las posibles jugadas de las blancas normales:
-        Movida sencilla a la izquierda o derecha y a arriba, comer hacia izquierda o derecha, 
-        comer consecutivamente.
-
-        Esta es la lista de todas las posibles jugadas de las negras normales:
-        mover sencillo a la izquierda y derecha y a abajo, comer hacia izquierda o derecha,
-        comer consecutivamente.
-
-        Esta es la lista de todas las posibles jugadas para una ficha reina (independiente de si es
-        blanca o negra):
-
-        mover hacia arriba o hacia abajo y a izquierda o derecha, comer en cualquer direccion,
-        comer consecutivamente.
-       */ 
+       boolean valida = true;
+        if(turno % 2 == 0){
+           if(tipo == 3 || tipo == 4){
+               valida = false;
+               throw new Exception("Es el turno de las blancas.");
+           }
+       }else if(turno % 2 == 1){
+           if(tipo == 1 || tipo == 2){
+               valida = false;
+               throw new Exception("Es el turno de las negras.");
+           }
+       }
        int xi = Integer.parseInt(inicial.charAt(0) + "");
        int yi = Integer.parseInt(inicial.charAt(1) + "");
        int xf = Integer.parseInt(llegada.charAt(0) + "");
        int yf = Integer.parseInt(llegada.charAt(1) + "");
-       boolean valida = true;
+       
        if(tipo == 1){ //en caso de que la ficha sea blanca (esta en la parte de abajo del tablero.)
-        if(xf >= xi){ // ojo antes era menor o igual
+        if(Math.abs(xf - xi) == 0 && Math.abs(yf - yi) == 0){
+           valida = false;
+            throw new Exception("No se puede quedar quieta."); 
+        }
+        if(xf > xi){ // ojo antes era menor o igual
             valida = false; // las fichas blancas normales solo se pueden mover hacia adelante.
             throw new Exception("La ficha solo se puede mover hacia adelante, pues no es una Reina.");
         }
@@ -98,6 +100,7 @@ public class Juego {
             }else if(matriz[xf][yf] == 0){
                 matriz[xi][yi] = 0; // hizo una movida sencilla a izquierda o a derecha.
                 matriz[xf][yf] = 1;
+                turno++;
                 if(xf == 0){
                     matriz[xf][yf] = 2;
                 }
@@ -119,6 +122,8 @@ public class Juego {
                 matriz[xf][yf] = 1;
                 matriz[xi][yi] = 0;
                 matriz[xf + 1][yaux] = 0; // en el espacio intermedio se borra la ficha que se comio.
+                //aqui debe ir la parte que permita volver a jugar en caso de que tenga mas por comer.
+                turno++;
                 if(xf == 0){
                     matriz[xf][yf] = 2;
                 }
@@ -132,11 +137,11 @@ public class Juego {
 
                 }
             }
-        }else{
+        }/*else{
              valida = false;
             throw new Exception("Las fichas sencillas solo pueden mover hacia adelante y hacia un lado.");
             
-        }
+        }*/ // OJO A VER QUE PASA SIN ESTE ELSE!!!
 
         if(Math.abs(xf - xi) != Math.abs(yf - yi)){
             valida = false;
@@ -144,14 +149,12 @@ public class Juego {
         }
         
        }
-
-       // para las fichas negras sencillas. esta parte debe ir en el metodo 
-       //que calcula las jugadas de la maquina, sino el jugador podria mover
-       //las fichas de la maquina que es el rival.
-       
        
        if(tipo == 2){ //en caso de que la ficha sea blanca (esta en la parte de abajo del tablero.)
-        
+        if(Math.abs(xf - xi) == 0 && Math.abs(yf - yi) == 0){
+            valida = false;
+            throw new Exception("Debe moverse.");
+        }
         if(yf == yi){
             valida = false; // las fichas solo se pueden mover en diagonal.
             throw new Exception("La jugada tiene que ser en diagonal!");
@@ -162,58 +165,84 @@ public class Juego {
                 throw new Exception("La posición de destino esta ocupada, mueva a otra coordenada valida.");
             }else if(matriz[xf][yf] == 0){
                 matriz[xi][yi] = 0; // hizo una movida sencilla a izquierda o a derecha.
+                turno++;
                 matriz[xf][yf] = 2;
-                
             }
         }else if(Math.abs(xf - xi) != Math.abs(yf - yi)){
              valida = false;
-            throw new Exception("Debe mover una o dos unidades en ambas coordenadas.");
+            throw new Exception("Debe mover las mismas unidades en ambas coordenadas.");
             
         }
-        if(Math.abs(xf - xi) == 2 && Math.abs(yf - yi) == 2){ // si movio dos en y dos en x, hay que revisar si comio algo.
+        if(Math.abs(xf - xi) >= 2 && Math.abs(yf - yi) >= 2){ 
             int yaux;
+            boolean derecha = false;
+            boolean izquierda = false;
+            boolean arriba = false;
+            boolean abajo = false;
             if(yf - yi > 0){
                 yaux = yf - 1;
+                derecha = true;
             }else{
                 yaux = yf + 1;
+                izquierda = true;
             }
             int xaux;
             if(xf - xi > 0){
                 xaux = xf - 1;
+                abajo = true;
             }else{
                 xaux = xf + 1;
+                arriba = true;
             }
-            if(matriz[xaux][yaux] == 3 || matriz[xaux][yaux] == 4){
-                if((matriz[xaux][yaux] != 1 && matriz[xaux][yaux] != 2) && matriz[xf][yf] == 0){
-                matriz[xf][yf] = 2;
-                matriz[xi][yi] = 0;
-                matriz[xaux][yaux] = 0; // en el espacio intermedio se borra la ficha que se comio.
-                
-                System.out.println("Felicidades, se ha comido una ficha enemiga!");
-                System.out.println("Puede efectuar otra jugada con esa ficha,"
-                + "siempre y cuando sea para comer.");
-                
-                }else{
+            if(matriz[xf][yf] != 0){
+                valida = false;
+                throw new Exception("La posicion de llegada esta ocupada.");
+            }
+            if(Math.abs(xf - xi) == 0 && Math.abs(yf - yi) == 0){
+                valida = false;
+                throw new Exception("Debe moverse!!!");
+            }
+            int i = xi;
+            int j = yi;
+            int dx = (xf - xi)/Math.abs(xf - xi);
+            int dy = (yf - yi) / Math.abs(yf - yi);
+            i = i + dx;
+            j = j + dy;
+            int cont = 0;
+            int posx = 0;
+            int posy = 0;
+            while(i != xf){
+                if(matriz[i][j] == 1 || matriz[i][j] == 2){
                     valida = false;
-                   throw new Exception("No pude hacer saltos entre fichas propias o comidas dobles.");
-
+                    throw new Exception("No puede pasar por sobre fichas propias.");
                 }
+                if(matriz[i][j] == 3 || matriz[i][j] == 4){
+                    cont++;
+                    posx = i;
+                    posy = j;
+                }
+                    i = i + dx;
+                    j = j + dy;
+                }
+            if(cont >= 2){
+                valida = false;
+                throw new Exception("No puede comer mas de una ficha contraria.");
+            }else if(cont == 1){
+                matriz[posx][posy] = 0;
             }
-        }else{
-             valida = false;
-            throw new Exception("Las fichas sencillas solo pueden mover hacia adelante y hacia un lado.");
             
-        }
-
-        if(Math.abs(xf - xi) != Math.abs(yf - yi)){
-            valida = false;
-            throw new Exception("La coordenada de llegada no es valida.");
-        }
-        
+            }
+        matriz[xf][yf] = 2;
+        matriz[xi][yi] = 0;
+        turno++;
        }
        
        
        if(tipo == 3){
+            if(Math.abs(xf - xi) == 0 && Math.abs(yf - yi) == 0){
+                 valida = false;
+                 throw new Exception("Debe moverse.");
+            }
         if(xf - xi == 0){
             valida = false;
             throw new Exception("La ficha solo se debe mover en diagonal hacia abajo.");
@@ -230,6 +259,7 @@ public class Juego {
                 System.out.println("Entre!!!");
                 matriz[xf][yf] = 3;
                 matriz[xi][yi] = 0;
+                turno++;
                 if(xf == 7){
                     matriz[xf][yf] = 4;
                 }
@@ -247,6 +277,7 @@ public class Juego {
                 matriz[xi][yi] = 0;
                 matriz[xf][yf] = 3;
                 matriz[xf - 1][yaux] = 0;
+                turno++;
                 if(xf == 7){
                     matriz[xf][yf] = 4;
                 }
@@ -260,11 +291,16 @@ public class Juego {
             }
         }
         if(Math.abs(xf - xi) != Math.abs(yf - yi)){
+            valida = false;
             throw new Exception("La jugada no es valida por su coordenada de llegada.");
         }
        }
-     //Corregir codigo de tipo 4.  
+      
     if(tipo == 4){
+        if(Math.abs(xf - xi) == 0 && Math.abs(yf - yi) == 0){
+            valida = false;
+            throw new Exception("Debe moverse.");
+        }
         if(yf == yi){
             valida = false; // las fichas solo se pueden mover en diagonal.
             throw new Exception("La jugada tiene que ser en diagonal!");
@@ -275,53 +311,76 @@ public class Juego {
                 throw new Exception("La posición de destino esta ocupada, mueva a otra coordenada valida.");
             }else if(matriz[xf][yf] == 0){
                 matriz[xi][yi] = 0; // hizo una movida sencilla a izquierda o a derecha.
+                turno++;
                 matriz[xf][yf] = 4;
-                
             }
         }else if(Math.abs(xf - xi) != Math.abs(yf - yi)){
              valida = false;
-            throw new Exception("Debe mover una o dos unidades en ambas coordenadas.");
+            throw new Exception("Debe mover las mismas unidades en ambas coordenadas.");
             
         }
-        if(Math.abs(xf - xi) == 2 && Math.abs(yf - yi) == 2){ // si movio dos en y dos en x, hay que revisar si comio algo.
+        if(Math.abs(xf - xi) >= 2 && Math.abs(yf - yi) >= 2){ 
             int yaux;
+            boolean derecha = false;
+            boolean izquierda = false;
+            boolean arriba = false;
+            boolean abajo = false;
             if(yf - yi > 0){
                 yaux = yf - 1;
+                derecha = true;
             }else{
                 yaux = yf + 1;
+                izquierda = true;
             }
             int xaux;
             if(xf - xi > 0){
                 xaux = xf - 1;
+                abajo = true;
             }else{
                 xaux = xf + 1;
+                arriba = true;
             }
-            if(matriz[xaux][yaux] == 3 || matriz[xaux][yaux] == 4){
-                if((matriz[xaux][yaux] != 1 && matriz[xaux][yaux] != 2) && matriz[xf][yf] == 0){
-                matriz[xf][yf] = 4;
-                matriz[xi][yi] = 0;
-                matriz[xaux][yaux] = 0; // en el espacio intermedio se borra la ficha que se comio.
-                
-                System.out.println("Felicidades, se ha comido una ficha enemiga!");
-                System.out.println("Puede efectuar otra jugada con esa ficha,"
-                + "siempre y cuando sea para comer.");
-                
-                }else{
+            if(matriz[xf][yf] != 0){
+                valida = false;
+                throw new Exception("La posicion de llegada esta ocupada.");
+            }
+            if(Math.abs(xf - xi) == 0 || Math.abs(yf - yi) == 0){
+                valida = false;
+                throw new Exception("Debe moverse!!!");
+            }
+            int i = xi;
+            int j = yi;
+            int dx = (xf - xi)/Math.abs(xf - xi);
+            int dy = (yf - yi) / Math.abs(yf - yi);
+            i = i + dx;
+            j = j + dy;
+            int cont = 0;
+            int posx = 0;
+            int posy = 0;
+            while(i != xf){
+                if(matriz[i][j] == 3 || matriz[i][j] == 4){
                     valida = false;
-                   throw new Exception("No pude hacer saltos entre fichas propias o comidas dobles.");
-
+                    throw new Exception("No puede pasar por sobre fichas propias.");
                 }
+                if(matriz[i][j] == 1 || matriz[i][j] == 2){
+                    cont++;
+                    posx = i;
+                    posy = j;
+                }
+                    i = i + dx;
+                    j = j + dy;
+                }
+            if(cont >= 2){
+                valida = false;
+                throw new Exception("No puede comer mas de una ficha contraria.");
+            }else if(cont == 1){
+                matriz[posx][posy] = 0;
             }
-        }else{
-             valida = false;
-            throw new Exception("Las fichas sencillas solo pueden mover hacia adelante y hacia un lado.");
             
-        }
-
-        if(Math.abs(xf - xi) != Math.abs(yf - yi)){
-            valida = false;
-            throw new Exception("La coordenada de llegada no es valida.");
-        }
+            }
+        matriz[xf][yf] = 4;
+        matriz[xi][yi] = 0;
+        turno++;
        }
        
       return valida;
