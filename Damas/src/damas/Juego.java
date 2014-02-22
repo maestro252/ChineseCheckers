@@ -165,7 +165,6 @@ public class Juego {
                 throw new Exception("La posición de destino esta ocupada, mueva a otra coordenada valida.");
             }else if(matriz[xf][yf] == 0){
                 matriz[xi][yi] = 0; // hizo una movida sencilla a izquierda o a derecha.
-                turno++;
                 matriz[xf][yf] = 2;
             }
         }else if(Math.abs(xf - xi) != Math.abs(yf - yi)){
@@ -256,7 +255,6 @@ public class Juego {
                 valida = false;
                 throw new Exception("La coordenada de llegada esta ocupada.");
             }else if(matriz[xf][yf]== 0){
-                System.out.println("Entre!!!");
                 matriz[xf][yf] = 3;
                 matriz[xi][yi] = 0;
                 turno++;
@@ -311,7 +309,6 @@ public class Juego {
                 throw new Exception("La posición de destino esta ocupada, mueva a otra coordenada valida.");
             }else if(matriz[xf][yf] == 0){
                 matriz[xi][yi] = 0; // hizo una movida sencilla a izquierda o a derecha.
-                turno++;
                 matriz[xf][yf] = 4;
             }
         }else if(Math.abs(xf - xi) != Math.abs(yf - yi)){
