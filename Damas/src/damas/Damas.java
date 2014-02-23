@@ -16,12 +16,14 @@ import java.awt.event.*;
  */
 public class Damas extends JFrame implements MouseListener, ActionListener{
     JButton selec;
+    public static Damas interfaz;
     //Variables de Graficos
-    JButton btnRegistro, btnRendirse, btnNueva;
-    JLabel lblGanadas, lblPerdidas, lblEmpatadas, lblContG, lblContP, lblContE;
+    JButton btnRendirse;
+    public static JTextArea jugadas;
     JPanel botones;
     JButton tablero[][];
-    JPanel PanelTablero;
+    JPanel PanelTablero, PanelOpc;
+    JScrollPane ScrollTable;
     ImageIcon negra = new ImageIcon("src//images//fNegra.png");
     ImageIcon blanca = new ImageIcon("src//images//fBlanca.png");
     ImageIcon blancaR = new ImageIcon("src//images//fBlancaR.png");
@@ -107,29 +109,30 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
         maquina = new Juego(tablero);
         getContentPane().add(PanelTablero);
         
-        btnRegistro = new JButton("Registro");
-        btnRegistro.setBounds(800, 27, 100, 27);
-        btnRegistro.addActionListener(this);
-        getContentPane().add(btnRegistro);
+        
+        PanelOpc = new JPanel();
+        PanelOpc.setBounds(670, 27, 300, 550);
+        PanelOpc.setOpaque(true);
+        PanelOpc.setBackground(new Color(Integer.parseInt("a8b2b3", 16)));
+        PanelOpc.setLayout(null);
+        PanelOpc.setBorder(BorderFactory.createTitledBorder("Registro"));
+        
+        jugadas = new JTextArea();
+        jugadas.setText(" ");
+        jugadas.setBounds(15, 30, 270, 500);
+        jugadas.setEditable(false);
+        
+        ScrollTable = new JScrollPane(jugadas);
+        ScrollTable.setBounds(15,30,270,500);
+          
+        PanelOpc.add(ScrollTable);
+        
+        getContentPane().add(PanelOpc);
         
         btnRendirse = new JButton("Rendirse");
-        btnRendirse.setBounds(800, 127, 100, 27);
+        btnRendirse.setBounds(670, 600, 100, 27);
         btnRendirse.addActionListener(this);
         getContentPane().add(btnRendirse);
-        
-        btnNueva = new JButton("Otra partida");
-        btnNueva.setBounds(800, 227, 100, 27);
-        btnNueva.addActionListener(this);
-        getContentPane().add(btnNueva);
-        
-        lblGanadas = new JLabel();
-        lblGanadas.setBounds(800, 327, 100, 27);
-        
-        lblEmpatadas = new JLabel();
-        lblEmpatadas.setBounds(800, 327, 100, 27);
-        
-        lblPerdidas = new JLabel();
-        lblPerdidas.setBounds(800, 327, 100, 27);
         
         setVisible(true);
         
@@ -186,6 +189,9 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == btnRendirse){
+            Damas.interfaz = new Damas();
+        }else{
         contador++;
         System.out.println(e.getActionCommand());
         if(contador %2 != 0){
@@ -231,6 +237,7 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
             System.out.println("");
         }
         repaint();
+        }
     }
     
     
@@ -238,6 +245,6 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Damas ínterfaz = new Damas();
+         interfaz = new Damas();
     }
 }

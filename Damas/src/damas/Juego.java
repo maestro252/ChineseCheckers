@@ -7,16 +7,21 @@
 package damas;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author jonathaneidelman & Carlos Sanchez
  */
 public class Juego {
-    
+    public int numBlancas = 12;
+    public int numNegras = 12;
+    public boolean a = false;
+    int c, d;
     public static int matriz[][];
-    public static int turno = 0;
+    public int turno = 0;
     public static int blanca, negra, Rblanca, Rnegra;
+    public String s = "";
     JButton tablero[][];
     public Juego(JButton tablero[][]) {
         matriz = new int [8][8];
@@ -64,6 +69,9 @@ public class Juego {
     }
     public boolean validarJugada (int tipo, String inicial, String llegada) throws Exception{
        boolean valida = true;
+       a = false;
+       c = 0;
+       d = c;
         if(turno % 2 == 0){
            if(tipo == 3 || tipo == 4){
                valida = false;
@@ -100,9 +108,14 @@ public class Juego {
             }else if(matriz[xf][yf] == 0){
                 matriz[xi][yi] = 0; // hizo una movida sencilla a izquierda o a derecha.
                 matriz[xf][yf] = 1;
+                s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
+                Damas.jugadas.setText(s);
                 turno++;
                 if(xf == 0){
                     matriz[xf][yf] = 2;
+                    s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " R" + "\n";
+                    Damas.jugadas.setText(s);
+                    
                 }
             }
         }else if(Math.abs(xf - xi) != Math.abs(yf - yi)){
@@ -124,8 +137,19 @@ public class Juego {
                 matriz[xf + 1][yaux] = 0; // en el espacio intermedio se borra la ficha que se comio.
                 //aqui debe ir la parte que permita volver a jugar en caso de que tenga mas por comer.
                 turno++;
+                numNegras--;
+                if(numNegras == 0){
+                	JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana el humano.",
+                       "Felicidades!!!", JOptionPane.WARNING_MESSAGE);
+                	Damas.interfaz = new Damas();
+                }
                 if(xf == 0){
                     matriz[xf][yf] = 2;
+                    s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " ||| " + (xf+1) + "," + yaux +  " C, R" + "\n";
+                    Damas.jugadas.setText(s);
+                }else{
+                    s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " ||| " + (xf+1) + "," + yaux +  " C" + "\n";
+                    Damas.jugadas.setText(s);
                 }
                 System.out.println("Felicidades, se ha comido una ficha enemiga!");
                 System.out.println("Puede efectuar otra jugada con esa ficha,"
@@ -166,6 +190,8 @@ public class Juego {
             }else if(matriz[xf][yf] == 0){
                 matriz[xi][yi] = 0; // hizo una movida sencilla a izquierda o a derecha.
                 matriz[xf][yf] = 2;
+                s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
+                Damas.jugadas.setText(s);
             }
         }else if(Math.abs(xf - xi) != Math.abs(yf - yi)){
              valida = false;
@@ -228,11 +254,28 @@ public class Juego {
                 throw new Exception("No puede comer mas de una ficha contraria.");
             }else if(cont == 1){
                 matriz[posx][posy] = 0;
+                a = true;
+                c = posx;
+                d = posy;
+                numNegras--;
             }
             
             }
+        
+                if(numNegras == 0){
+                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana el humano.",
+                       "Felicidades!!!", JOptionPane.WARNING_MESSAGE);
+                	Damas.interfaz = new Damas();
+                }
         matriz[xf][yf] = 2;
         matriz[xi][yi] = 0;
+        if(a){
+            s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " ||| " + c + "," + d +  " C" + "\n";
+            Damas.jugadas.setText(s);
+        }else{
+            s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
+            Damas.jugadas.setText(s);
+        }
         turno++;
        }
        
@@ -257,9 +300,13 @@ public class Juego {
             }else if(matriz[xf][yf]== 0){
                 matriz[xf][yf] = 3;
                 matriz[xi][yi] = 0;
+                s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
+                Damas.jugadas.setText(s);
                 turno++;
                 if(xf == 7){
                     matriz[xf][yf] = 4;
+                    s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " R" + "\n";
+                    Damas.jugadas.setText(s);
                 }
             }
         }
@@ -276,8 +323,19 @@ public class Juego {
                 matriz[xf][yf] = 3;
                 matriz[xf - 1][yaux] = 0;
                 turno++;
+                numBlancas--;
+                if(numBlancas == 0){
+                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                       "Has perdido", JOptionPane.WARNING_MESSAGE);
+                	Damas.interfaz = new Damas();
+                }
                 if(xf == 7){
                     matriz[xf][yf] = 4;
+                    s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " ||| " + (xf+1) + "," + yaux +  " C, R" + "\n";
+                    Damas.jugadas.setText(s);
+                }else{
+                    s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) +  " ||| " + (xf+1) + "," + yaux + " C" + "\n";
+                    Damas.jugadas.setText(s);
                 }
                 System.out.println("Felicidades, se ha comida una ficha rival.");
                 System.out.println("Puede hacer otra jugada con esta ficha.");
@@ -310,6 +368,8 @@ public class Juego {
             }else if(matriz[xf][yf] == 0){
                 matriz[xi][yi] = 0; // hizo una movida sencilla a izquierda o a derecha.
                 matriz[xf][yf] = 4;
+                s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
+                Damas.jugadas.setText(s);
             }
         }else if(Math.abs(xf - xi) != Math.abs(yf - yi)){
              valida = false;
@@ -372,12 +432,30 @@ public class Juego {
                 throw new Exception("No puede comer mas de una ficha contraria.");
             }else if(cont == 1){
                 matriz[posx][posy] = 0;
+                a = true;
+                c = posx;
+                d = posy;
+                numBlancas--;
             }
             
             }
         matriz[xf][yf] = 4;
         matriz[xi][yi] = 0;
+                if(numBlancas == 0){
+                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                       "Has perdido", JOptionPane.WARNING_MESSAGE);
+                	Damas.interfaz = new Damas();
+                }
+        if(a){
+            s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " ||| " + c + "," + d +  " C" + "\n";
+            Damas.jugadas.setText(s);
+        }else{
+            s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
+            Damas.jugadas.setText(s);
+        }
         turno++;
+        s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
+        Damas.jugadas.setText(s);
        }
        
       return valida;
@@ -387,5 +465,12 @@ public class Juego {
     }
     public int[][] getMat(){
         return matriz;
+    }
+    public boolean atrancado(int tipo){
+        boolean atrancado = true;
+        if(tipo == 1){
+        
+        }
+        return atrancado;
     }
 }
