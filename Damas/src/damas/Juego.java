@@ -68,6 +68,21 @@ public class Juego {
         
     }
     public boolean validarJugada (int tipo, String inicial, String llegada) throws Exception{
+       boolean atrancado = atrancado(turno);
+       if(!atrancado){
+           String g;
+           if(turno % 2 == 0){
+               g = "Gana la máquina.";
+           }else{
+               g= "Gana el humano.";
+           }
+           JOptionPane.showMessageDialog(Damas.interfaz, "Victoria!!!\n" + g,
+                       "No hay jugadas validas!", JOptionPane.WARNING_MESSAGE);
+                	Damas.interfaz = new Damas();
+                        s = "";
+                        Damas.jugadas.setText("");
+                        return true;
+       }
        boolean valida = true;
        a = false;
        c = 0;
@@ -142,6 +157,9 @@ public class Juego {
                 	JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana el humano.",
                        "Felicidades!!!", JOptionPane.WARNING_MESSAGE);
                 	Damas.interfaz = new Damas();
+                        s = "";
+                        Damas.jugadas.setText("");
+                        return true;
                 }
                 if(xf == 0){
                     matriz[xf][yf] = 2;
@@ -266,6 +284,9 @@ public class Juego {
                     JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana el humano.",
                        "Felicidades!!!", JOptionPane.WARNING_MESSAGE);
                 	Damas.interfaz = new Damas();
+                        s = "";
+                        Damas.jugadas.setText("");
+                        return true;
                 }
         matriz[xf][yf] = 2;
         matriz[xi][yi] = 0;
@@ -328,6 +349,9 @@ public class Juego {
                     JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
                        "Has perdido", JOptionPane.WARNING_MESSAGE);
                 	Damas.interfaz = new Damas();
+                        s = "";
+                        Damas.jugadas.setText("");
+                        return true;
                 }
                 if(xf == 7){
                     matriz[xf][yf] = 4;
@@ -445,6 +469,9 @@ public class Juego {
                     JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
                        "Has perdido", JOptionPane.WARNING_MESSAGE);
                 	Damas.interfaz = new Damas();
+                        s = "";
+                        Damas.jugadas.setText("");
+                        return true;
                 }
         if(a){
             s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " ||| " + c + "," + d +  " C" + "\n";
@@ -457,7 +484,6 @@ public class Juego {
         s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
         Damas.jugadas.setText(s);
        }
-       
       return valida;
     }
     public void calcularJugada(int mat[][]){
@@ -466,11 +492,89 @@ public class Juego {
     public int[][] getMat(){
         return matriz;
     }
-    public boolean atrancado(int tipo){
-        boolean atrancado = true;
-        if(tipo == 1){
-        
+    public boolean atrancado(int turno){
+        boolean puede = false;
+        if(turno % 2 == 0){
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if(matriz[i][j] == 1 || matriz[i][j] == 2){
+                        if(matriz[i][j] == 1){
+                        puede = movida(1, i, j, -1, 1);
+                        if(puede){
+                            return true;
+                        }
+                        puede = movida(1, i, j, -1, -1);
+                        if(puede){
+                            return true;
+                        }
+                        }else if(matriz[i][j] == 2){
+                            puede = movida(2, i, j, 1, 1);
+                            if(puede){
+                                return true;
+                            }
+                            puede = movida(2, i, j, 1, -1);
+                            if(puede){
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                        if(matriz[i][j] == 3 || matriz[i][j] == 4){
+                            puede = movida(3, i, j, 1, 1);
+                            if(puede){
+                                return true;
+                            }
+                            puede = movida(3, i, j, 1, -1);
+                            if(puede){
+                                return true;
+                            }
+                        }
+                        
+                        if(matriz[i][j] == 4){
+                            puede = movida(4, i, j, -1, 1);
+                            if(puede){
+                                return true;
+                            }
+                            puede = movida(4, i, j, -1, -1);
+                            if(puede){
+                                return true;
+                            }
+                        }
+                }
+            }
+                    
         }
-        return atrancado;
+        
+        return puede;
+    }
+    public boolean movida(int tipo, int i, int j, int di, int dj){
+        boolean puede = false;
+        if((i + di >= 0 && i + di <= 7) && (j + dj >= 0 && j + dj <= 7)){
+            if(matriz[i + di][j + dj] == 0){
+                puede = true;
+                return puede;
+            }else{
+                if(tipo == 1 || tipo == 2){
+                    if(matriz[i + di][j + dj] == 3 || matriz[i + di][j + dj] == 4){
+                        if(((i + 2 * di >= 0 && i + 2 * di <= 7) && (j + 2*dj >= 0 && j + 2*dj <= 7)) && matriz[i + 2*di][j + 2*dj] == 0){
+                            puede = true;
+                            return puede;
+                        }
+                    }
+                }else if(tipo == 3 || tipo == 4){
+                    if(matriz[i + di][j + dj] == 1 || matriz[i + di][j + dj] == 2){
+                        if(((i + 2 * di >= 0 && i + 2 * di <= 7) && (j + 2*dj >= 0 && j + 2*dj <= 7)) && matriz[i + 2*di][j + 2*dj] == 0){
+                            puede = true;
+                            return puede;
+                        }
+                    }
+                }
+            }
+        }
+        return puede;
     }
 }

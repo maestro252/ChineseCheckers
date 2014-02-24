@@ -38,7 +38,7 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
     
     public Damas(){
         
-        setTitle("Chinese Chekers || Estructuras de datos y algoritmos II");
+        setTitle("Juego clásico de Damas  ||| Estructuras de datos y algoritmos II");
     	setBounds(10,10,1000,700);//Desginacion de dos enteros que determinaran el tamaño de la ventana X y Y(Ancho y largo respectivamente)
     	setResizable(false);//Para que el usuario no pueda modificar el tamaño de la ventana
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//para que el programa se desvanezca del todo de la memoria del computador
@@ -134,6 +134,8 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
         btnRendirse.addActionListener(this);
         getContentPane().add(btnRendirse);
         
+        jugadas.setText(" ");
+        
         setVisible(true);
         
     }
@@ -191,6 +193,7 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == btnRendirse){
             Damas.interfaz = new Damas();
+            jugadas.setText(" ");
         }else{
         contador++;
         System.out.println(e.getActionCommand());
@@ -224,7 +227,9 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
                 int l = Integer.parseInt(partida.charAt(1) + "");
                 tablero[k][l].setIcon(null);
             }catch(Exception x){
-                System.out.println(x.getMessage());
+                JOptionPane.showMessageDialog(Damas.interfaz, x.getMessage(),
+                       "Mensaje: ", JOptionPane.WARNING_MESSAGE);
+                	
             }
             
         }
