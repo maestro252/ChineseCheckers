@@ -151,7 +151,11 @@ public class Juego {
                 matriz[xi][yi] = 0;
                 matriz[xf + 1][yaux] = 0; // en el espacio intermedio se borra la ficha que se comio.
                 //aqui debe ir la parte que permita volver a jugar en caso de que tenga mas por comer.
-                turno++;
+                if(((xf-2 >= 0 && yf-2 >= 0 && yf+2 <= 7))&&((matriz[xf-1][yf+1]!=0) && (matriz[xf-2][yf+2]==0)||((matriz[xf-1][yf-1]!=0) && (matriz[xf-2][yf-2]==0)))){
+                        //Al efectuar validaciones la ficha tiene la posibilidad de mover doble
+                    }else{
+                        turno++;
+                    }
                 numNegras--;
                 if(numNegras == 0){
                 	JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana el humano.",
@@ -290,6 +294,15 @@ public class Juego {
                 }
         matriz[xf][yf] = 2;
         matriz[xi][yi] = 0;
+        if(((xf-2 >= 0 && xf+2<=7 && yf-2 >= 0 && yf+2<=7))&&
+               ((matriz[xf-1][yf+1]!=0) && (matriz[xf-2][yf+2]==0)||((matriz[xf-1][yf-1]!=0) && (matriz[xf-2][yf-2]==0)))){
+                //Al efectuar validaciones la ficha tiene la posibilidad de mover doble
+            }else if (((xf+2 >= 0 && xf+2<=7 && yf-2 >= 0 && yf+2<=7))&&(((matriz[xf+1][yf+1]!=0) && (matriz[xf+2][yf+2]==0))||((matriz[xf+1][yf-1]!=0) && (matriz[xf+2][yf-2]==0)))){
+                //Al efectuar validaciones la ficha tiene la posibilidad de mover doble
+            }
+            else{
+                turno++;
+            }
         if(a){
             s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " ||| " + c + "," + d +  " C" + "\n";
             Damas.jugadas.setText(s);
@@ -297,7 +310,7 @@ public class Juego {
             s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
             Damas.jugadas.setText(s);
         }
-        turno++;
+        
        }
        
        
@@ -343,7 +356,11 @@ public class Juego {
                 matriz[xi][yi] = 0;
                 matriz[xf][yf] = 3;
                 matriz[xf - 1][yaux] = 0;
-                turno++;
+                if(((xf+2 <= 7 && yf+-2 >=0 &&yf+2 <= 7))&&((matriz[xf+1][yf+1]!=0) && (matriz[xf+2][yf+2]==0)||((matriz[xf+1][yf-1]!=0) && (matriz[xf+2][yf-2]==0)))){
+                        //Al efectuar validaciones la ficha tiene la posibilidad de mover doble
+                    }else{
+                        turno++;
+                    }
                 numBlancas--;
                 if(numBlancas == 0){
                     JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
@@ -394,6 +411,7 @@ public class Juego {
                 matriz[xf][yf] = 4;
                 s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
                 Damas.jugadas.setText(s);
+                
             }
         }else if(Math.abs(xf - xi) != Math.abs(yf - yi)){
              valida = false;
@@ -480,7 +498,15 @@ public class Juego {
             s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
             Damas.jugadas.setText(s);
         }
-        turno++;
+        if(((xf-2 >= 0 && xf+2<=7 && yf-2 >= 0 && yf+2<=7))&&
+          ((matriz[xf-1][yf+1]!=0) && (matriz[xf-2][yf+2]==0)||((matriz[xf-1][yf-1]!=0) && (matriz[xf-2][yf-2]==0)))){
+                //Al efectuar validaciones la ficha tiene la posibilidad de mover doble
+            }else if (((xf+2 >= 0 && xf+2<=7 && yf-2 >= 0 && yf+2<=7))&&(((matriz[xf+1][yf+1]!=0) && (matriz[xf+2][yf+2]==0))||((matriz[xf+1][yf-1]!=0) && (matriz[xf+2][yf-2]==0)))){
+                //Al efectuar validaciones la ficha tiene la posibilidad de mover doble
+            }
+            else{
+            turno++;
+            }
         s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
         Damas.jugadas.setText(s);
        }
