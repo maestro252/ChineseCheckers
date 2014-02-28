@@ -6,6 +6,8 @@
 
 package damas;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -68,6 +70,7 @@ public class Juego {
         
     }
     public boolean validarJugada (int tipo, String inicial, String llegada) throws Exception{
+       
        boolean atrancado = atrancado(turno);
        if(!atrancado){
            String g;
@@ -126,6 +129,7 @@ public class Juego {
                 s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
                 Damas.jugadas.setText(s);
                 turno++;
+                //inteligencia();
                 if(xf == 0){
                     matriz[xf][yf] = 2;
                     s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " R" + "\n";
@@ -302,6 +306,7 @@ public class Juego {
             }
             else{
                 turno++;
+                inteligencia();
             }
         if(a){
             s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " ||| " + c + "," + d +  " C" + "\n";
@@ -525,20 +530,20 @@ public class Juego {
                 for (int j = 0; j < 8; j++) {
                     if(matriz[i][j] == 1 || matriz[i][j] == 2){
                         if(matriz[i][j] == 1){
-                        puede = movida(1, i, j, -1, 1);
+                        puede = movida(1, i, j, -1, 1,false);
                         if(puede){
                             return true;
                         }
-                        puede = movida(1, i, j, -1, -1);
+                        puede = movida(1, i, j, -1, -1,false);
                         if(puede){
                             return true;
                         }
                         }else if(matriz[i][j] == 2){
-                            puede = movida(2, i, j, 1, 1);
+                            puede = movida(2, i, j, 1, 1,false);
                             if(puede){
                                 return true;
                             }
-                            puede = movida(2, i, j, 1, -1);
+                            puede = movida(2, i, j, 1, -1,false);
                             if(puede){
                                 return true;
                             }
@@ -550,22 +555,22 @@ public class Juego {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                         if(matriz[i][j] == 3 || matriz[i][j] == 4){
-                            puede = movida(3, i, j, 1, 1);
+                            puede = movida(3, i, j, 1, 1,false);
                             if(puede){
                                 return true;
                             }
-                            puede = movida(3, i, j, 1, -1);
+                            puede = movida(3, i, j, 1, -1,false);
                             if(puede){
                                 return true;
                             }
                         }
                         
                         if(matriz[i][j] == 4){
-                            puede = movida(4, i, j, -1, 1);
+                            puede = movida(4, i, j, -1, 1,false);
                             if(puede){
                                 return true;
                             }
-                            puede = movida(4, i, j, -1, -1);
+                            puede = movida(4, i, j, -1, -1, false);
                             if(puede){
                                 return true;
                             }
@@ -577,11 +582,19 @@ public class Juego {
         
         return puede;
     }
-    public boolean movida(int tipo, int i, int j, int di, int dj){
+    public boolean movida(int tipo, int i, int j, int di, int dj, boolean x){
         boolean puede = false;
         if((i + di >= 0 && i + di <= 7) && (j + dj >= 0 && j + dj <= 7)){
             if(matriz[i + di][j + dj] == 0){
                 puede = true;
+                if(x){
+                    matriz[i][j] = 0;
+                    matriz[i + di][j + dj] = tipo;
+                    turno++;
+                    if(i + di == 7 ){
+                        matriz[i + di][j + dj] = 4;
+                    }
+                }
                 return puede;
             }else{
                 if(tipo == 1 || tipo == 2){
@@ -595,6 +608,15 @@ public class Juego {
                     if(matriz[i + di][j + dj] == 1 || matriz[i + di][j + dj] == 2){
                         if(((i + 2 * di >= 0 && i + 2 * di <= 7) && (j + 2*dj >= 0 && j + 2*dj <= 7)) && matriz[i + 2*di][j + 2*dj] == 0){
                             puede = true;
+                            if(x){
+                            matriz[i][j] = 0;
+                            matriz[i + 2*di][j + 2*dj] = tipo;
+                            matriz[i+di][j+dj] = 0;
+                            turno++;
+                            if(i + 2*di == 7 ){
+                                matriz[i + 2*di][j + 2*dj] = 4;
+                             }
+                            }
                             return puede;
                         }
                     }
@@ -603,4 +625,88 @@ public class Juego {
         }
         return puede;
     }
+    public void inteligencia(){
+        try {
+            Thread.sleep(800);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Juego.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(turno % 2 == 0){
+            return;
+        }
+        if(turno == 1){
+             int primero[] = {1,3,5,7};
+             int x = (int)Math.round(Math.random() * 3);
+             x = primero[x];
+             int y = 1, f = -1;
+             y = (int)Math.random()*(y-f)+ f;
+             //realizar movida.
+             matriz[2][x] = 0;
+             matriz[3][x+y] = 3;
+             turno++;
+        
+        }else{//aqui va toda la logica del resto de movimientos de la maquina.
+            //ensayar con llamados con booleans por defecto en los metodos de atascamiento.
+            boolean atrancado = atrancado(turno);
+            if(!atrancado){
+           String g;
+           if(turno % 2 == 0){
+               g = "Gana la máquina.";
+           }else{
+               g= "Gana el humano.";
+           }
+           JOptionPane.showMessageDialog(Damas.interfaz, "Victoria!!!\n" + g,
+                       "No hay jugadas validas!", JOptionPane.WARNING_MESSAGE);
+                	Damas.interfaz = new Damas();
+                        s = "";
+                        Damas.jugadas.setText("");
+                        return;
+       }
+            String arr[] = new String [numNegras];
+            int pos = 0;
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                   if(matriz[i][j] == 3 || matriz[i][j] == 4){
+                       arr[pos] = "" + i + j;
+                       pos++;
+                   }
+                }
+            }
+            int posx, posy, azar;
+            azar = ((int)Math.round(Math.random()*(numNegras - 1)));
+            System.out.println("Azar es : " + azar);
+            String ubicacion = arr[azar];
+            posx = Integer.parseInt(ubicacion.charAt(0) + "");
+            posy = Integer.parseInt(ubicacion.charAt(1) + "");
+            int tipito = matriz[posx][posy];
+            boolean movi = false;
+            while(!movi){
+            if(movida(tipito, posx, posy, 1, 1, false )){ // se deben hacer las preguntas de si puede comer
+                                                          // porque de poder es mejor que lo haga
+                                                          // en el else va la movida sencilla.
+                                                          //de no tener validas, se escoge otra ficha al azar.
+                movida(tipito, posx, posy, 1, 1, true);
+                movi = true;
+               
+                
+            }else if(movida(tipito, posx, posy, 1, -1, false )){
+                
+                movida(tipito, posx, posy, 1, -1, true);
+                movi = true;
+                
+            }
+            azar = ((int)Math.round(Math.random()*(numNegras - 1)));
+            System.out.println("Azar es : " + azar);
+            ubicacion = arr[azar];
+            posx = Integer.parseInt(ubicacion.charAt(0) + "");
+            posy = Integer.parseInt(ubicacion.charAt(1) + "");
+            tipito = matriz[posx][posy];
+            }
+            
+            
+        }
+    }
+  public int getTurno(){
+      return turno;
+  }
 }

@@ -9,6 +9,8 @@ import static damas.Juego.matriz;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -190,16 +192,17 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed (ActionEvent e) {
         if(e.getSource() == btnRendirse){
             Damas.interfaz = new Damas();
             jugadas.setText(" ");
         }else{
         contador++;
         System.out.println(e.getActionCommand());
-        if(contador %2 != 0){
-        partida = e.getActionCommand();
+        if(contador % 2 != 0){
+            partida = e.getActionCommand();
         }else{
+          //if(maquina.getTurno() % 2 == 0){
             int tipo = 0;
             String text;
             int i = Integer.parseInt(partida.charAt(0) + "");
@@ -219,7 +222,10 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
                     else if(text.equals("src//images//fBlancaR.png")){
                         tipo = 2;
                     }
-                }
+                }else{
+                JOptionPane.showMessageDialog(Damas.interfaz, "Debe hacer click en una ficha!",
+                       "Mensaje: ", JOptionPane.WARNING_MESSAGE);
+            }
             llegada = e.getActionCommand();
             try{
                 maquina.validarJugada(tipo, partida, llegada);
@@ -231,16 +237,10 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
                        "Mensaje: ", JOptionPane.WARNING_MESSAGE);
                 	
             }
+            maquina.inteligencia();
             
         }
-        
         sincronizarMat();
-        for(int i=0; i <= 7; i++){
-            for(int j=0; j<=7; j++){
-                System.out.print(mat[i][j]);
-            }
-            System.out.println("");
-        }
         repaint();
         }
     }
