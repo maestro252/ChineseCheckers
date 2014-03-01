@@ -237,8 +237,7 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
                        "Mensaje: ", JOptionPane.WARNING_MESSAGE);
                 	
             }
-            maquina.inteligencia();
-            
+            maquina.inteligencia(); 
         }
         sincronizarMat();
         repaint();

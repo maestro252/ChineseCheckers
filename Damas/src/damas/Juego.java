@@ -306,7 +306,7 @@ public class Juego {
             }
             else{
                 turno++;
-                inteligencia();
+                //inteligencia();
             }
         if(a){
             s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " ||| " + c + "," + d +  " C" + "\n";
@@ -584,6 +584,7 @@ public class Juego {
     }
     public boolean movida(int tipo, int i, int j, int di, int dj, boolean x){
         boolean puede = false;
+        boolean imprimio = false;
         if((i + di >= 0 && i + di <= 7) && (j + dj >= 0 && j + dj <= 7)){
             if(matriz[i + di][j + dj] == 0){
                 puede = true;
@@ -593,7 +594,14 @@ public class Juego {
                     turno++;
                     if(i + di == 7 ){
                         matriz[i + di][j + dj] = 4;
+                        s += "Máquina:" + (-i+8) + "," + (j+1) + " a " + (-(i + di)+8) + "," + (j + dj + 1) + " R" +  "\n" ;
+                        Damas.jugadas.setText(s);
+                        imprimio = true;
                     }
+                        if(!imprimio){
+                        s += "Máquina:" + (-i+8) + "," + (j+1) + " a " + (-(i + di)+8) + "," + (j + dj + 1) + "\n";
+                        Damas.jugadas.setText(s);
+                        }
                 }
                 return puede;
             }else{
@@ -615,7 +623,14 @@ public class Juego {
                             turno++;
                             if(i + 2*di == 7 ){
                                 matriz[i + 2*di][j + 2*dj] = 4;
+                               s += "Máquina:" + (-i+8) + "," + (j+1) + " a " + (-(i + 2*di)+8) + "," + (j + 2*dj + 1) + " ||| " + (-(i + di) + 8) + "," + (j + dj + 1) + " C, R" +  "\n";
+                               Damas.jugadas.setText(s);
+                               imprimio = true;
                              }
+                            if(!imprimio){
+                            s += "Máquina:" + (-i+8) + "," + (j+1) + " a " + (-(i + 2*di)+8) + "," + (j + 2*dj + 1) + " ||| " + (-(i + di) + 8) + "," + (j + dj + 1) + " C" + "\n";
+                            Damas.jugadas.setText(s);
+                            }
                             }
                             return puede;
                         }
@@ -644,6 +659,9 @@ public class Juego {
              matriz[2][x] = 0;
              matriz[3][x+y] = 3;
              turno++;
+             s += "Máquina:" + "6" + "," + (x+1) + " a " + "5" + "," + (x + y + 1) + "\n";
+             Damas.jugadas.setText(s);
+             
         
         }else{//aqui va toda la logica del resto de movimientos de la maquina.
             //ensayar con llamados con booleans por defecto en los metodos de atascamiento.
