@@ -66,9 +66,7 @@ public class Juego {
             System.out.println("");
         }
     }
-    public void traducirMatriz(){
-        
-    }
+    
     public boolean validarJugada (int tipo, String inicial, String llegada) throws Exception{
        
        boolean atrancado = atrancado(turno);
@@ -81,6 +79,7 @@ public class Juego {
            }
            JOptionPane.showMessageDialog(Damas.interfaz, "Victoria!!!\n" + g,
                        "No hay jugadas validas!", JOptionPane.WARNING_MESSAGE);
+                        Damas.interfaz.dispose();
                 	Damas.interfaz = new Damas();
                         s = "";
                         Damas.jugadas.setText("");
@@ -164,6 +163,7 @@ public class Juego {
                 if(numNegras == 0){
                 	JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana el humano.",
                        "Felicidades!!!", JOptionPane.WARNING_MESSAGE);
+                        Damas.interfaz.dispose();
                 	Damas.interfaz = new Damas();
                         s = "";
                         Damas.jugadas.setText("");
@@ -187,11 +187,7 @@ public class Juego {
 
                 }
             }
-        }/*else{
-             valida = false;
-            throw new Exception("Las fichas sencillas solo pueden mover hacia adelante y hacia un lado.");
-            
-        }*/ // OJO A VER QUE PASA SIN ESTE ELSE!!!
+        }
 
         if(Math.abs(xf - xi) != Math.abs(yf - yi)){
             valida = false;
@@ -291,6 +287,7 @@ public class Juego {
                 if(numNegras == 0){
                     JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana el humano.",
                        "Felicidades!!!", JOptionPane.WARNING_MESSAGE);
+                        Damas.interfaz.dispose();
                 	Damas.interfaz = new Damas();
                         s = "";
                         Damas.jugadas.setText("");
@@ -370,6 +367,7 @@ public class Juego {
                 if(numBlancas == 0){
                     JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
                        "Has perdido", JOptionPane.WARNING_MESSAGE);
+                        Damas.interfaz.dispose();
                 	Damas.interfaz = new Damas();
                         s = "";
                         Damas.jugadas.setText("");
@@ -491,6 +489,7 @@ public class Juego {
                 if(numBlancas == 0){
                     JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
                        "Has perdido", JOptionPane.WARNING_MESSAGE);
+                        Damas.interfaz.dispose();
                 	Damas.interfaz = new Damas();
                         s = "";
                         Damas.jugadas.setText("");
@@ -675,6 +674,7 @@ public class Juego {
            }
            JOptionPane.showMessageDialog(Damas.interfaz, "Victoria!!!\n" + g,
                        "No hay jugadas validas!", JOptionPane.WARNING_MESSAGE);
+                        Damas.interfaz.dispose();    
                 	Damas.interfaz = new Damas();
                         s = "";
                         Damas.jugadas.setText("");
@@ -698,32 +698,141 @@ public class Juego {
             posy = Integer.parseInt(ubicacion.charAt(1) + "");
             int tipito = matriz[posx][posy];
             boolean movi = false;
-            while(!movi){
-            if(movida(tipito, posx, posy, 1, 1, false )){ // se deben hacer las preguntas de si puede comer
-                                                          // porque de poder es mejor que lo haga
-                                                          // en el else va la movida sencilla.
-                                                          //de no tener validas, se escoge otra ficha al azar.
-                movida(tipito, posx, posy, 1, 1, true);
-                movi = true;
-               
-                
-            }else if(movida(tipito, posx, posy, 1, -1, false )){
-                
-                movida(tipito, posx, posy, 1, -1, true);
-                movi = true;
-                
-            }
-            azar = ((int)Math.round(Math.random()*(numNegras - 1)));
-            System.out.println("Azar es : " + azar);
-            ubicacion = arr[azar];
-            posx = Integer.parseInt(ubicacion.charAt(0) + "");
-            posy = Integer.parseInt(ubicacion.charAt(1) + "");
-            tipito = matriz[posx][posy];
-            }
+                while(!movi){
+                    if(tipito != 4){
+                    if(movida(tipito, posx, posy, 1, 1, false )){ // se deben hacer las preguntas de si puede comer
+                                                                  // porque de poder es mejor que lo haga
+                                                                  // en el else va la movida sencilla.
+                                                                  //de no tener validas, se escoge otra ficha al azar.
+                        movida(tipito, posx, posy, 1, 1, true);
+                        movi = true;
+
+
+                    }else if(movida(tipito, posx, posy, 1, -1, false )){
+
+                        movida(tipito, posx, posy, 1, -1, true);
+                        movi = true;
+
+                    }
+                    azar = ((int)Math.round(Math.random()*(numNegras - 1)));
+                    System.out.println("Azar es : " + azar);
+                    ubicacion = arr[azar];
+                    posx = Integer.parseInt(ubicacion.charAt(0) + "");
+                    posy = Integer.parseInt(ubicacion.charAt(1) + "");
+                    tipito = matriz[posx][posy];
+                    }else{
+                        movi = moverNegra(posx,posy);
+                        azar = ((int)Math.round(Math.random()*(numNegras - 1)));
+                        System.out.println("Azar es : " + azar);
+                        ubicacion = arr[azar];
+                        posx = Integer.parseInt(ubicacion.charAt(0) + "");
+                        posy = Integer.parseInt(ubicacion.charAt(1) + "");
+                        tipito = matriz[posx][posy];
+                    }
+                }
             
             
         }
     }
+  public boolean moverNegra(int x, int y){
+      //hacia abajo a la derecha.
+      int m = 0; //espacios en blanco despues de ficha contraria.
+      boolean comer = false;
+      int n = 0; //espacios en blanco directamente despues de la ficha en x,y
+      int dx = 1;
+      int dy = 1;
+      int xf = x + dx;
+      int yf = y + dy;
+      int xcomer = 0, ycomer = 0;
+      while(xf <= 7 && yf <= 7){
+          if(matriz[xf][yf] == 0){
+              if(!comer){
+                  n++;
+              }else{
+                  m++;
+              }
+          }else{
+              if(matriz[xf][yf] == 1 || matriz[xf][yf] == 2){
+                  if(!comer){
+                      comer = true;
+                      xcomer = xf;
+                      ycomer = yf;
+                  }else{
+                      if(m == 0){
+                          return false;
+                      }else{
+                            matriz[x][y] = 0;
+                            matriz[xf - 1][yf - 1] = 4;
+                            matriz[xcomer][ycomer] = 0;
+                            numBlancas--;
+                            //pantallazo si se acaba el juego.
+                            return true;
+                        }
+                  }
+              }else{
+                  if(n > 0 || m > 0){
+                      matriz[xf - 1][yf - 1] = 4;
+                      matriz[x][y] = 0;
+                      turno++;
+                      return true;
+                  }
+              }
+              
+          }
+          xf++;
+          yf++;
+      }
+      
+      //hacia arriba a la izquierda
+      m = 0; //espacios en blanco despues de ficha contraria.
+      comer = false;
+      n = 0; //espacios en blanco directamente despues de la ficha en x,y
+      dx = -1;
+      dy = -1;
+      xf = x + dx;
+      yf = y + dy;
+      xcomer = 0;
+      ycomer = 0;
+      while(xf >= 0 && yf >= 0){
+          if(matriz[xf][yf] == 0){
+              if(!comer){
+                  n++;
+              }else{
+                  m++;
+              }
+          }else{
+              if(matriz[xf][yf] == 1 || matriz[xf][yf] == 2){
+                  if(!comer){
+                      comer = true;
+                      xcomer = xf;
+                      ycomer = yf;
+                  }else{
+                      if(m == 0){
+                          return false;
+                      }else{
+                            matriz[x][y] = 0;
+                            matriz[xf - dx][yf - dy] = 4;
+                            matriz[xcomer][ycomer] = 0;
+                            numBlancas--;
+                            //pantallazo si se acaba el juego.
+                            return true;
+                        }
+                  }
+              }else{
+                  if(n > 0 || m > 0){
+                      matriz[xf - dx][yf - dy] = 4;
+                      matriz[x][y] = 0;
+                      turno++;
+                      return true;
+                  }
+              }
+              
+          }
+          xf--;
+          yf--;
+      }
+      return false;
+  }
   public int getTurno(){
       return turno;
   }

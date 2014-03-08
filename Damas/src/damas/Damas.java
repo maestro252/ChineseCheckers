@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Personal
  */
-public class Damas extends JFrame implements MouseListener, ActionListener{
+public class Damas extends JFrame implements ActionListener{
     JButton selec;
     public static Damas interfaz;
     //Variables de Graficos
@@ -165,35 +165,10 @@ public class Damas extends JFrame implements MouseListener, ActionListener{
             }
         }
     }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        
-    }
-
     @Override
     public void actionPerformed (ActionEvent e) {
         if(e.getSource() == btnRendirse){
+            dispose();
             Damas.interfaz = new Damas();
             jugadas.setText(" ");
         }else{
