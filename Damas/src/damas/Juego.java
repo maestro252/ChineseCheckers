@@ -682,11 +682,23 @@ public class Juego {
        }
             String arr[] = new String [numNegras];
             int pos = 0;
+            boolean hayReina = false;
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                    if(matriz[i][j] == 3 || matriz[i][j] == 4){
                        arr[pos] = "" + i + j;
                        pos++;
+                       if(matriz[i][j] == 4){
+                           hayReina = true;
+                           moverNegra(i,j);
+                           /*if(matriz[i][j] == 4){
+                               break;
+                           }
+                           return;*/
+                           if(matriz[i][j] != 4){
+                               return;
+                           }
+                       }
                    }
                 }
             }
@@ -722,6 +734,7 @@ public class Juego {
                     tipito = matriz[posx][posy];
                     }else{
                         movi = moverNegra(posx,posy);
+                        moverNegra(posx, posy);
                         azar = ((int)Math.round(Math.random()*(numNegras - 1)));
                         System.out.println("Azar es : " + azar);
                         ubicacion = arr[azar];
@@ -744,6 +757,7 @@ public class Juego {
       int xf = x + dx;
       int yf = y + dy;
       int xcomer = 0, ycomer = 0;
+      if(xf <= 7 && yf <= 7 && matriz[xf][yf] < 3){
       while(xf <= 7 && yf <= 7){
           if(matriz[xf][yf] == 0){
               if(!comer){
@@ -759,18 +773,44 @@ public class Juego {
                       ycomer = yf;
                   }else{
                       if(m == 0){
-                          return false;
+                          if(n >= 1){
+                              matriz[x][y] = 0;
+                              matriz[xf - 2*dx][yf - 2*dy] = 4;
+                              turno ++;
+                              return true;
+                          }else{
+                              break;
+                          }
                       }else{
                             matriz[x][y] = 0;
                             matriz[xf - 1][yf - 1] = 4;
                             matriz[xcomer][ycomer] = 0;
+                            //falta turno++ por el caso en que pueda volver a comer.
+                            turno++;
                             numBlancas--;
                             //pantallazo si se acaba el juego.
                             return true;
                         }
                   }
               }else{
+                  if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
+                      matriz[x][y] = 0;
+                      matriz[xf - dx][yf - dy] = 4;
+                      turno++;
+                      if(xcomer > 0 || ycomer > 0){
+                          matriz[xcomer][ycomer] = 0;
+                          numBlancas--;
+                          //JoptionPane
+                      }
+                      return true;
+                  }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
+                      break;
+                  }
                   if(n > 0 || m > 0){
+                      if(comer){
+                          matriz[xcomer][ycomer] = 0;
+                          numBlancas--;
+                      }
                       matriz[xf - 1][yf - 1] = 4;
                       matriz[x][y] = 0;
                       turno++;
@@ -782,7 +822,26 @@ public class Juego {
           xf++;
           yf++;
       }
-      
+      if(comer && m > 0){
+          matriz[xcomer][ycomer] = 0;
+          numBlancas--;
+          //poner el Joption pane si las blancas son == 0
+          matriz[x][y] = 0;
+          matriz[xf - 1][yf - 1] = 4;
+          turno++;
+          return true;
+      }else if(!comer && n > 0){
+          matriz[xf - dx][yf - dy] = 4;
+          matriz[x][y] = 0;
+          turno++;
+          return true;
+      }else if(comer && m == 0 && n >= 1){
+          matriz[x][y] = 0;
+          matriz[xf - 2*dx][yf - 2*dy] = 4;
+          turno++;
+          return true;
+      }
+     }
       //hacia arriba a la izquierda
       m = 0; //espacios en blanco despues de ficha contraria.
       comer = false;
@@ -793,6 +852,7 @@ public class Juego {
       yf = y + dy;
       xcomer = 0;
       ycomer = 0;
+      if(xf >= 0 && yf >= 0 && matriz[xf][yf] < 3){
       while(xf >= 0 && yf >= 0){
           if(matriz[xf][yf] == 0){
               if(!comer){
@@ -808,18 +868,43 @@ public class Juego {
                       ycomer = yf;
                   }else{
                       if(m == 0){
-                          return false;
+                          if(n >= 1){
+                              matriz[x][y] = 0;
+                              matriz[xf - 2*dx][yf - 2*dy] = 4;
+                              turno ++;
+                              return true;
+                          }else{
+                              break;
+                          }
                       }else{
                             matriz[x][y] = 0;
                             matriz[xf - dx][yf - dy] = 4;
                             matriz[xcomer][ycomer] = 0;
+                            turno++;
                             numBlancas--;
                             //pantallazo si se acaba el juego.
                             return true;
                         }
                   }
               }else{
+                  if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
+                      matriz[x][y] = 0;
+                      matriz[xf - dx][yf - dy] = 4;
+                      turno++;
+                      if(xcomer > 0 || ycomer > 0){
+                          matriz[xcomer][ycomer] = 0;
+                          numBlancas--;
+                          //JoptionPane
+                      }
+                      return true;
+                  }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
+                      break;
+                  }
                   if(n > 0 || m > 0){
+                      if(comer){
+                          matriz[xcomer][ycomer] = 0;
+                          numBlancas--;
+                      }
                       matriz[xf - dx][yf - dy] = 4;
                       matriz[x][y] = 0;
                       turno++;
@@ -831,6 +916,215 @@ public class Juego {
           xf--;
           yf--;
       }
+      if(comer && m > 0){
+          matriz[xcomer][ycomer] = 0;
+          numBlancas--;
+          //poner el Joption pane si las blancas son == 0
+          matriz[x][y] = 0;
+          matriz[xf + 1][yf + 1] = 4;
+          turno++;
+          return true;
+      }else if(!comer && n > 0){
+          matriz[xf - dx][yf - dy] = 4;
+          matriz[x][y] = 0;
+          turno++;
+          return true;
+      }else if(comer && m == 0 && n >= 1){
+          matriz[x][y] = 0;
+          matriz[xf - 2*dx][yf - 2*dy] = 4;
+          turno++;
+          return true;
+      }
+     } 
+      //hacia abajo a la izquierda
+      m = 0; //espacios en blanco despues de ficha contraria.
+      comer = false;
+      n = 0; //espacios en blanco directamente despues de la ficha en x,y
+      dx =  1;
+      dy = -1;
+      xf = x + dx;
+      yf = y + dy;
+      xcomer = 0;
+      ycomer = 0;
+      if(xf <= 7 && yf >= 0 && matriz[xf][yf] < 3){
+      while(xf <= 7 && yf >= 0){
+          if(matriz[xf][yf] == 0){
+              if(!comer){
+                  n++;
+              }else{
+                  m++;
+              }
+          }else{
+              if(matriz[xf][yf] == 1 || matriz[xf][yf] == 2){
+                  if(!comer){
+                      comer = true;
+                      xcomer = xf;
+                      ycomer = yf;
+                  }else{
+                      if(m == 0){
+                          if(n >= 1){
+                              matriz[x][y] = 0;
+                              matriz[xf - 2*dx][yf - 2*dy] = 4;
+                              turno ++;
+                              return true;
+                          }else{
+                           break;   
+                          }
+                      }else{
+                            matriz[x][y] = 0;
+                            matriz[xf - dx][yf - dy] = 4;
+                            matriz[xcomer][ycomer] = 0;
+                            turno++;
+                            numBlancas--;
+                            //pantallazo si se acaba el juego.
+                            return true;
+                        }
+                  }
+              }else{
+                  if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
+                      matriz[x][y] = 0;
+                      matriz[xf - dx][yf - dy] = 4;
+                      turno++;
+                      if(xcomer > 0 || ycomer > 0){
+                          matriz[xcomer][ycomer] = 0;
+                          numBlancas--;
+                          //JoptionPane
+                      }
+                      return true;
+                  }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
+                      break;
+                  }
+                  if(n > 0 || m > 0){
+                      if(comer){
+                          matriz[xcomer][ycomer] = 0;
+                          numBlancas--;
+                      }
+                      matriz[xf - dx][yf - dy] = 4;
+                      matriz[x][y] = 0;
+                      turno++;
+                      return true;
+                  }
+              }
+              
+          }
+          xf = xf + dx;
+          yf = yf + dy;
+      }
+      if(comer && m > 0){
+          matriz[xcomer][ycomer] = 0;
+          numBlancas--;
+          //poner el Joption pane si las blancas son == 0
+          matriz[x][y] = 0;
+          matriz[xf - 1][yf + 1] = 4;
+          turno++;
+          return true;
+      }else if(!comer && n > 0){
+          matriz[xf - dx][yf - dy] = 4;
+          matriz[x][y] = 0;
+          turno++;
+          return true;
+      }else if(comer && m == 0 && n >= 1){
+          matriz[x][y] = 0;
+          matriz[xf - 2*dx][yf - 2*dy] = 4;
+          turno++;
+          return true;
+      }
+     }
+      //hacia arriba a la derecha
+      m = 0; //espacios en blanco despues de ficha contraria.
+      comer = false;
+      n = 0; //espacios en blanco directamente despues de la ficha en x,y
+      dx = -1;
+      dy =  1;
+      xf = x + dx;
+      yf = y + dy;
+      xcomer = 0;
+      ycomer = 0;
+      if(xf >= 0 && yf <= 7 && matriz[xf][yf] < 3){
+      while(xf >= 0 && yf <= 7){
+          if(matriz[xf][yf] == 0){
+              if(!comer){
+                  n++;
+              }else{
+                  m++;
+              }
+          }else{
+              if(matriz[xf][yf] == 1 || matriz[xf][yf] == 2){
+                  if(!comer){
+                      comer = true;
+                      xcomer = xf;
+                      ycomer = yf;
+                  }else{
+                      if(m == 0){
+                          if(n >= 1){
+                              matriz[x][y] = 0;
+                              matriz[xf - 2*dx][yf - 2*dy] = 4;
+                              turno ++;
+                              return true;
+                          }else{
+                              break;
+                          }
+                      }else{
+                            matriz[x][y] = 0;
+                            matriz[xf - dx][yf - dy] = 4;
+                            matriz[xcomer][ycomer] = 0;
+                            turno++;
+                            numBlancas--;
+                            //pantallazo si se acaba el juego.
+                            return true;
+                        }
+                  }
+              }else{
+                  if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
+                      matriz[x][y] = 0;
+                      matriz[xf - dx][yf - dy] = 4;
+                      turno++;
+                      if(xcomer > 0 || ycomer > 0){
+                          matriz[xcomer][ycomer] = 0;
+                          numBlancas--;
+                          //JoptionPane
+                      }
+                      return true;
+                  }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
+                      break;
+                  }
+                  if(n > 0 || m > 0){
+                      if(comer){
+                          matriz[xcomer][ycomer] = 0;
+                          numBlancas--;
+                      }
+                      matriz[xf - dx][yf - dy] = 4;
+                      matriz[x][y] = 0;
+                      turno++;
+                      return true;
+                  }
+              }
+              
+          }
+          xf = xf + dx;
+          yf = yf + dy;
+      }
+      if(comer && m > 0){
+          matriz[xcomer][ycomer] = 0;
+          numBlancas--;
+          //poner el Joption pane si las blancas son == 0
+          matriz[x][y] = 0;
+          matriz[xf + 1][yf - 1] = 4;
+          turno++;
+          return true;
+      }else if(!comer && n > 0){
+          matriz[xf - dx][yf - dy] = 4;
+          matriz[x][y] = 0;
+          turno++;
+          return true;
+      }else if(comer && m == 0 && n >= 1){
+          matriz[x][y] = 0;
+          matriz[xf - 2*dx][yf - 2*dy] = 4;
+          turno++;
+          return true;
+      }
+     }
+      
       return false;
   }
   public int getTurno(){
