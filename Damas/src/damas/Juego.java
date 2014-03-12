@@ -1216,6 +1216,7 @@ public class Juego {
                                 matriz[xcomer][ycomer] = 0;
                                 //falta turno++ por el caso en que pueda volver a comer.
                                 turno++;
+                                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) + "\n";
                                 numBlancas--;
                                 //pantallazo si se acaba el juego.
                                 return true;
@@ -1226,10 +1227,17 @@ public class Juego {
                             matriz[x][y] = 0;
                             matriz[xf - dx][yf - dy] = 4;
                             turno++;
+                            boolean si = false;
                             if(xcomer > 0 || ycomer > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
+                                si = true;
                                 //JoptionPane
+                            }
+                            if(si){
+                                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) +  " ||| " + (xcomer) + "," + (ycomer) + " C" + "\n";
+                            }else{
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) + "\n";  
                             }
                             return true;
                         }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
