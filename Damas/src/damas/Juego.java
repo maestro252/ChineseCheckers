@@ -26,6 +26,9 @@ public class Juego {
     public String s = "";
     JButton tablero[][];
     public boolean reinaInteligente[][];
+    public boolean jDoble;
+    public int guardaJugadaX;
+    public int guardaJugadaY;
     public Juego(JButton tablero[][]) {
         matriz = new int [8][8];
         blanca = 1;
@@ -35,6 +38,7 @@ public class Juego {
         reinaInteligente = new boolean [4][2];
         matriz = new int[8][8];
         this.tablero = tablero;
+        jDoble = false;
         System.out.println(tablero[0][1].getIcon());
         sincronizarMat();
     }
@@ -90,6 +94,78 @@ public class Juego {
         a = false;
         c = 0;
         d = c;
+        
+        /*if(jDoble)
+        {
+            int piX = Integer.parseInt((new StringBuilder()).append(inicial.charAt(0)).append("").toString());
+            int piY = Integer.parseInt((new StringBuilder()).append(inicial.charAt(1)).append("").toString());
+            int pfX = Integer.parseInt((new StringBuilder()).append(llegada.charAt(0)).append("").toString());
+            int pfY = Integer.parseInt((new StringBuilder()).append(llegada.charAt(1)).append("").toString());
+            if(guardaJugadaX != piX && guardaJugadaY != piY)
+                throw new Exception("Solo puede Jugar con la Ultima ficha que comio.");
+            if(tipo == 1 || tipo == 2)
+                if(tipo == 1)
+                {
+                    int cambioY = pfY - piY;
+                    int cambioX = pfX - piX;
+                    if(matriz[pfX][pfY] != 0)
+                        throw new Exception("La posici\363n de llegada debe estar vacia.");
+                    jDoble = false;
+                    if(cambioX != -2 && cambioY != 2 || cambioX != -2 && cambioY != -2)
+                    {
+                        jDoble = true;
+                        throw new Exception("Solo puede Jugar para volver a comer.");
+                    }
+                    if(cambioY == 2)
+                    {
+                        if(matriz[piX - 1][piY + 1] == 1 || matriz[piX - 1][piY + 1] == 2)
+                        {
+                            jDoble = true;
+                            throw new Exception("Para volver a jugar debe comer.");
+                        }
+                        jDoble = false;
+                    } else
+                    {
+                        if(matriz[piX - 1][piY - 1] == 1 || matriz[piX - 1][piY - 1] == 2)
+                        {
+                            jDoble = true;
+                            throw new Exception("Para volver a jugar debe comer.");
+                        }
+                        jDoble = false;
+                    }
+                } else
+                if(tipo == 2)
+                {
+                    int cambioY = pfY - piY;
+                    int cambioX = pfX - piX;
+                    if(matriz[pfX][pfY] != 0)
+                        throw new Exception("La posici\363n de llegada debe estar vacia.");
+                    jDoble = false;
+                    if(matriz[pfX][pfY] != 0 && matriz[pfX - cambioX / Math.abs(cambioX)][pfY - cambioY / Math.abs(cambioY)] == 0)
+                    {
+                        jDoble = true;
+                        throw new Exception("Solo puede Jugar para volver a comer.");
+                    }
+                    if(cambioY == 2)
+                    {
+                        if(matriz[piX - 1][piY + 1] == 1 || matriz[piX - 1][piY + 1] == 2)
+                        {
+                            jDoble = true;
+                            throw new Exception("Para volver a jugar debe comer.");
+                        }
+                        jDoble = false;
+                    } else
+                    {
+                        if(matriz[piX - 1][piY - 1] == 1 || matriz[piX - 1][piY - 1] == 2)
+                        {
+                            jDoble = true;
+                            throw new Exception("Para volver a jugar debe comer.");
+                        }
+                        jDoble = false;
+                    }
+                }
+        }*/
+        
         if(turno % 2 == 0){
             if(tipo == 3 || tipo == 4){
                 valida = false;
@@ -1206,6 +1282,8 @@ public class Juego {
                                     matriz[x][y] = 0;
                                     matriz[xf - 2*dx][yf - 2*dy] = 4;
                                     turno ++;
+                                    s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 2*dx)+8) + "," + (yf - 2*dy +1) + "\n"; 
+                                    Damas.jugadas.setText(s);
                                     return true;
                                 }else{
                                     break;
@@ -1216,8 +1294,18 @@ public class Juego {
                                 matriz[xcomer][ycomer] = 0;
                                 //falta turno++ por el caso en que pueda volver a comer.
                                 turno++;
-                                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) + "\n";
+                                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
+                                Damas.jugadas.setText(s);
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
                                 //pantallazo si se acaba el juego.
                                 return true;
                             }
@@ -1231,26 +1319,55 @@ public class Juego {
                             if(xcomer > 0 || ycomer > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
                                 si = true;
                                 //JoptionPane
                             }
                             if(si){
-                                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) +  " ||| " + (xcomer) + "," + (ycomer) + " C" + "\n";
+                                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
+                                Damas.jugadas.setText(s);
                             }else{
-                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) + "\n";  
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) + "\n"; 
+                              Damas.jugadas.setText(s);
                             }
                             return true;
                         }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             break;
                         }
                         if(n > 0 || m > 0){
+                            boolean si = false;
                             if(comer){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
+                                si = true;
                             }
                             matriz[xf - 1][yf - 1] = 4;
                             matriz[x][y] = 0;
                             turno++;
+                            if(si){
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) + " ||| " + (8-xcomer) + (ycomer + 1) + " C" + "\n"; 
+                              Damas.jugadas.setText(s);
+                            }else{
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) + "\n";  
+                              Damas.jugadas.setText(s);
+                            }
                             return true;
                         }
                     }
@@ -1262,20 +1379,35 @@ public class Juego {
             if(comer && m > 0){
                 matriz[xcomer][ycomer] = 0;
                 numBlancas--;
+                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
                 //poner el Joption pane si las blancas son == 0
                 matriz[x][y] = 0;
                 matriz[xf - 1][yf - 1] = 4;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) + " ||| " + (8-xcomer) + (ycomer + 1) + " C" + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }else if(!comer && n > 0){
                 matriz[xf - dx][yf - dy] = 4;
                 matriz[x][y] = 0;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }else if(comer && m == 0 && n >= 1){
                 matriz[x][y] = 0;
                 matriz[xf - 2*dx][yf - 2*dy] = 4;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 2*dx)+8) + "," + (yf - 2*dy + 1) + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }
         }
@@ -1314,6 +1446,8 @@ public class Juego {
                                     matriz[x][y] = 0;
                                     matriz[xf - 2*dx][yf - 2*dy] = 4;
                                     turno ++;
+                                    s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 2*dx)+8) + "," + (yf - 2*dy +1) + "\n";
+                                    Damas.jugadas.setText(s);
                                     return true;
                                 }else{
                                     break;
@@ -1324,6 +1458,17 @@ public class Juego {
                                 matriz[xcomer][ycomer] = 0;
                                 turno++;
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
+                                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
+                                Damas.jugadas.setText(s);
                                 //pantallazo si se acaba el juego.
                                 return true;
                             }
@@ -1333,23 +1478,59 @@ public class Juego {
                             matriz[x][y] = 0;
                             matriz[xf - dx][yf - dy] = 4;
                             turno++;
+                            boolean si = false;
                             if(xcomer > 0 || ycomer > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
+                                si = true;
                                 //JoptionPane
+                            }
+                            if(si){
+                                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
+                                Damas.jugadas.setText(s);
+                            }else{
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + "\n";
+                              Damas.jugadas.setText(s);
                             }
                             return true;
                         }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             break;
                         }
                         if(n > 0 || m > 0){
+                            boolean si = false;
                             if(comer){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
+                                si = true;
                             }
                             matriz[xf - dx][yf - dy] = 4;
                             matriz[x][y] = 0;
                             turno++;
+                            if(si){
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + " ||| " + (8-xcomer) + (ycomer + 1) + " C" + "\n";
+                              Damas.jugadas.setText(s);
+                            }else{
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + "\n";
+                              Damas.jugadas.setText(s);
+                            }
                             return true;
                         }
                     }
@@ -1361,20 +1542,35 @@ public class Juego {
             if(comer && m > 0){
                 matriz[xcomer][ycomer] = 0;
                 numBlancas--;
+                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
                 //poner el Joption pane si las blancas son == 0
                 matriz[x][y] = 0;
                 matriz[xf + 1][yf + 1] = 4;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf + 1)+8) + "," + (yf + 1 + 1) + " ||| " + (8-xcomer) + (ycomer + 1) + " C" + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }else if(!comer && n > 0){
                 matriz[xf - dx][yf - dy] = 4;
                 matriz[x][y] = 0;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }else if(comer && m == 0 && n >= 1){
                 matriz[x][y] = 0;
                 matriz[xf - 2*dx][yf - 2*dy] = 4;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 2*dx)+8) + "," + (yf - 2*dy + 1) + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }
         }
@@ -1412,6 +1608,8 @@ public class Juego {
                                     matriz[x][y] = 0;
                                     matriz[xf - 2*dx][yf - 2*dy] = 4;
                                     turno ++;
+                                    s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 2*dx)+8) + "," + (yf - 2*dy +1) + "\n";
+                                    Damas.jugadas.setText(s);
                                     return true;
                                 }else{
                                     break;
@@ -1422,6 +1620,17 @@ public class Juego {
                                 matriz[xcomer][ycomer] = 0;
                                 turno++;
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
+                                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
+                                Damas.jugadas.setText(s);
                                 //pantallazo si se acaba el juego.
                                 return true;
                             }
@@ -1431,23 +1640,59 @@ public class Juego {
                             matriz[x][y] = 0;
                             matriz[xf - dx][yf - dy] = 4;
                             turno++;
+                            boolean si = false;
                             if(xcomer > 0 || ycomer > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
                                 //JoptionPane
+                                si = true;
+                            }
+                            if(si){
+                                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
+                                Damas.jugadas.setText(s);
+                            }else{
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + "\n"; 
+                              Damas.jugadas.setText(s);
                             }
                             return true;
                         }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             break;
                         }
                         if(n > 0 || m > 0){
+                            boolean si = false;
                             if(comer){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
+                                si = true;
                             }
                             matriz[xf - dx][yf - dy] = 4;
                             matriz[x][y] = 0;
                             turno++;
+                            if(si){
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + " ||| " + (8-xcomer) + (ycomer + 1) + " C" + "\n";
+                              Damas.jugadas.setText(s);
+                            }else{
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + "\n"; 
+                              Damas.jugadas.setText(s);
+                            }
                             return true;
                         }
                     }
@@ -1459,20 +1704,35 @@ public class Juego {
             if(comer && m > 0){
                 matriz[xcomer][ycomer] = 0;
                 numBlancas--;
+                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
                 //poner el Joption pane si las blancas son == 0
                 matriz[x][y] = 0;
                 matriz[xf - 1][yf + 1] = 4;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf + 1 + 1) + " ||| " + (8-xcomer) + (ycomer + 1) + " C" + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }else if(!comer && n > 0){
                 matriz[xf - dx][yf - dy] = 4;
                 matriz[x][y] = 0;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }else if(comer && m == 0 && n >= 1){
                 matriz[x][y] = 0;
                 matriz[xf - 2*dx][yf - 2*dy] = 4;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 2*dx)+8) + "," + (yf - 2*dy + 1) + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }
         }
@@ -1511,6 +1771,8 @@ public class Juego {
                                     matriz[x][y] = 0;
                                     matriz[xf - 2*dx][yf - 2*dy] = 4;
                                     turno ++;
+                                    s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 2*dx)+8) + "," + (yf - 2*dy +1) + "\n";
+                                    Damas.jugadas.setText(s);
                                     return true;
                                 }else{
                                     break;
@@ -1521,6 +1783,17 @@ public class Juego {
                                 matriz[xcomer][ycomer] = 0;
                                 turno++;
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
+                                 s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
+                                 Damas.jugadas.setText(s);
                                 //pantallazo si se acaba el juego.
                                 return true;
                             }
@@ -1530,23 +1803,60 @@ public class Juego {
                             matriz[x][y] = 0;
                             matriz[xf - dx][yf - dy] = 4;
                             turno++;
+                            boolean si = false;
                             if(xcomer > 0 || ycomer > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
+                                si = true;
                                 //JoptionPane
+                            }
+                            if(si){
+                                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
+                                Damas.jugadas.setText(s);
+                                
+                            }else{
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + "\n";
+                              Damas.jugadas.setText(s);
                             }
                             return true;
                         }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             break;
                         }
                         if(n > 0 || m > 0){
+                            boolean si = false;
                             if(comer){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
+                                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
+                                si = true;
                             }
                             matriz[xf - dx][yf - dy] = 4;
                             matriz[x][y] = 0;
                             turno++;
+                            if(si){
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + " ||| " + (8-xcomer) + (ycomer + 1) + " C" + "\n";
+                              Damas.jugadas.setText(s);
+                            }else{
+                              s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + "\n";
+                              Damas.jugadas.setText(s);
+                            }
                             return true;
                         }
                     }
@@ -1558,20 +1868,35 @@ public class Juego {
             if(comer && m > 0){
                 matriz[xcomer][ycomer] = 0;
                 numBlancas--;
+                if(numBlancas == 0){
+                                    JOptionPane.showMessageDialog(Damas.interfaz, "VICTORIA!!! gana la máquina!",
+                                                      "Has perdido", JOptionPane.WARNING_MESSAGE);
+                                    Damas.interfaz.dispose();
+                                    Damas.interfaz = new Damas();
+                                    s = "";
+                                    Damas.jugadas.setText("");
+                                    return true;
+                                }
                 //poner el Joption pane si las blancas son == 0
                 matriz[x][y] = 0;
                 matriz[xf + 1][yf - 1] = 4;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf + 1)+8) + "," + (yf - 1 + 1) + " ||| " + (8-xcomer) + (ycomer + 1) + " C" + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }else if(!comer && n > 0){
                 matriz[xf - dx][yf - dy] = 4;
                 matriz[x][y] = 0;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }else if(comer && m == 0 && n >= 1){
                 matriz[x][y] = 0;
                 matriz[xf - 2*dx][yf - 2*dy] = 4;
                 turno++;
+                s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 2*dx)+8) + "," + (yf - 2*dy + 1) + "\n";
+                Damas.jugadas.setText(s);
                 return true;
             }
         }
