@@ -29,6 +29,7 @@ public class Juego {
     public boolean jDoble;
     public int guardaJugadaX;
     public int guardaJugadaY;
+    public boolean vali = false;
     public Juego(JButton tablero[][]) {
         matriz = new int [8][8];
         blanca = 1;
@@ -94,78 +95,81 @@ public class Juego {
         a = false;
         c = 0;
         d = c;
-        
-        /*if(jDoble)
-        {
-            int piX = Integer.parseInt((new StringBuilder()).append(inicial.charAt(0)).append("").toString());
-            int piY = Integer.parseInt((new StringBuilder()).append(inicial.charAt(1)).append("").toString());
-            int pfX = Integer.parseInt((new StringBuilder()).append(llegada.charAt(0)).append("").toString());
-            int pfY = Integer.parseInt((new StringBuilder()).append(llegada.charAt(1)).append("").toString());
-            if(guardaJugadaX != piX && guardaJugadaY != piY)
-                throw new Exception("Solo puede Jugar con la Ultima ficha que comio.");
-            if(tipo == 1 || tipo == 2)
-                if(tipo == 1)
-                {
-                    int cambioY = pfY - piY;
-                    int cambioX = pfX - piX;
-                    if(matriz[pfX][pfY] != 0)
-                        throw new Exception("La posici\363n de llegada debe estar vacia.");
-                    jDoble = false;
-                    if(cambioX != -2 && cambioY != 2 || cambioX != -2 && cambioY != -2)
-                    {
-                        jDoble = true;
-                        throw new Exception("Solo puede Jugar para volver a comer.");
-                    }
-                    if(cambioY == 2)
-                    {
-                        if(matriz[piX - 1][piY + 1] == 1 || matriz[piX - 1][piY + 1] == 2)
-                        {
-                            jDoble = true;
-                            throw new Exception("Para volver a jugar debe comer.");
+        if(jDoble){
+           int piX = Integer.parseInt(inicial.charAt(0) + "");
+           int piY = Integer.parseInt(inicial.charAt(1) + "");
+           int pfX = Integer.parseInt(llegada.charAt(0) + "");
+           int pfY = Integer.parseInt(llegada.charAt(1) + "");
+           if(guardaJugadaX!=piX&&guardaJugadaY!=piY){
+               throw new Exception("Solo puede Jugar con la Ultima ficha que comio.");
+           }else if(tipo == 1 || tipo == 2){
+               if(tipo == 1){
+                   int cambioY = pfY- piY;
+                   int cambioX = pfX- piX;
+                   if(matriz[pfX][pfY]!=0){
+                       throw new Exception("La posición de llegada debe estar vacia.");
+                   }else{
+                       jDoble=false;
+                   }
+                   if((cambioX != -2 && cambioY != 2) || (cambioX != -2 && cambioY != -2)){
+                       jDoble=true;
+                       throw new Exception("Solo puede Jugar para volver a comer.");
+                   }else if (cambioY == 2){
+                       if(matriz[piX-1][piY+1]==1 || matriz[piX-1][piY+1]==2){
+                           jDoble=true;
+                           throw new Exception("Para volver a jugar debe comer.");
+                       }else{
+                           jDoble=false;
+                       }
+                   }else{
+                       if(matriz[piX-1][piY-1]==1 || matriz[piX-1][piY-1]==2){
+                           jDoble=true;
+                           throw new Exception("Para volver a jugar debe comer.");
+                       }else{
+                           jDoble=false;
+                       }
+                   }
+               }else if(tipo == 2){
+                   int cambioY = pfY - piY;
+                   int cambioX = pfX - piX;
+                   if(matriz[pfX][pfY]!=0){
+                       throw new Exception("La posición de llegada debe estar vacia.");
+                   }else{
+                       jDoble=false;
+                   }
+                   int k = piX-1;
+                   int l = piY+cambioY;
+                   boolean mult=false;
+                   if(cambioX < 0){
+                        while(k > pfX && !mult){
+                            if(matriz[k][l]>2){
+                                mult = true;
+                            }
+                            k--;
+                            l = l + cambioY;
                         }
-                        jDoble = false;
-                    } else
-                    {
-                        if(matriz[piX - 1][piY - 1] == 1 || matriz[piX - 1][piY - 1] == 2)
-                        {
+                        if(!mult){
                             jDoble = true;
-                            throw new Exception("Para volver a jugar debe comer.");
+                            throw new Exception("Solo puede Jugar para volver a comer.");
                         }
-                        jDoble = false;
-                    }
-                } else
-                if(tipo == 2)
-                {
-                    int cambioY = pfY - piY;
-                    int cambioX = pfX - piX;
-                    if(matriz[pfX][pfY] != 0)
-                        throw new Exception("La posici\363n de llegada debe estar vacia.");
-                    jDoble = false;
-                    if(matriz[pfX][pfY] != 0 && matriz[pfX - cambioX / Math.abs(cambioX)][pfY - cambioY / Math.abs(cambioY)] == 0)
-                    {
-                        jDoble = true;
-                        throw new Exception("Solo puede Jugar para volver a comer.");
-                    }
-                    if(cambioY == 2)
-                    {
-                        if(matriz[piX - 1][piY + 1] == 1 || matriz[piX - 1][piY + 1] == 2)
-                        {
+                   }else{
+                       k=piX+1;
+                       l = piY+cambioY;
+                       while(k < pfX && !mult){
+                            if(matriz[k][l]>2){
+                                mult = true;
+                            }
+                            k++;
+                            l = l + cambioY;
+                        }
+                        if(!mult){
                             jDoble = true;
-                            throw new Exception("Para volver a jugar debe comer.");
+                            throw new Exception("Solo puede Jugar para volver a comer.");
                         }
-                        jDoble = false;
-                    } else
-                    {
-                        if(matriz[piX - 1][piY - 1] == 1 || matriz[piX - 1][piY - 1] == 2)
-                        {
-                            jDoble = true;
-                            throw new Exception("Para volver a jugar debe comer.");
-                        }
-                        jDoble = false;
-                    }
-                }
-        }*/
-        
+                   }
+               }
+           }
+       }
         if(turno % 2 == 0){
             if(tipo == 3 || tipo == 4){
                 valida = false;
@@ -229,12 +233,14 @@ public class Juego {
                     if((matriz[xf + 1][yaux] != 1 && matriz[xf + 1][yaux] != 2) && matriz[xf][yf] == 0){
                         matriz[xf][yf] = 1;
                         matriz[xi][yi] = 0;
-                        matriz[xf + 1][yaux] = 0; // en el espacio intermedio se borra la ficha que se comio.
-                        //aqui debe ir la parte que permita volver a jugar en caso de que tenga mas por comer.
-                        if(((xf-2 >= 0 && yf-2 >= 0 && yf+2 <= 7))&&((matriz[xf-1][yf+1]!=0) && (matriz[xf-2][yf+2]==0)||((matriz[xf-1][yf-1]!=0) && (matriz[xf-2][yf-2]==0)))){
+                        matriz[xf + 1][yaux] = 0;
+                        if(((xf-2 >= 0 && (yf-2 >= 0 || yf+2 <= 7)))&&(yf+2 <= 7&&(matriz[xf-1][yf+1]!=0) && (matriz[xf-2][yf+2]==0)||(yf-2 >= 0&&(matriz[xf-1][yf-1]!=0) && (matriz[xf-2][yf-2]==0)))){
                             //Al efectuar validaciones la ficha tiene la posibilidad de mover doble
+                            jDoble=true;
+                            guardaJugadaX = xf;
+                            guardaJugadaY = yf;
                         }else{
-                            turno++;
+                                turno++;
                         }
                         numNegras--;
                         if(numNegras == 0){
@@ -254,10 +260,7 @@ public class Juego {
                             s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " ||| " + (xf+1) + "," + yaux +  " C" + "\n";
                             Damas.jugadas.setText(s);
                         }
-                        System.out.println("Felicidades, se ha comido una ficha enemiga!");
-                        System.out.println("Puede efectuar otra jugada con esa ficha,"
-                                           + "siempre y cuando sea para comer.");
-                        
+                    
                     }else{
                         valida = false;
                         throw new Exception("No pude hacer saltos entre fichas propias o comidas dobles.");
@@ -290,6 +293,8 @@ public class Juego {
                     matriz[xi][yi] = 0; // hizo una movida sencilla a izquierda o a derecha.
                     matriz[xf][yf] = 2;
                     s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
+                    turno++;
+                    vali = true;
                     Damas.jugadas.setText(s);
                 }
             }else if(Math.abs(xf - xi) != Math.abs(yf - yi)){
@@ -358,7 +363,80 @@ public class Juego {
                     d = posy;
                     numNegras--;
                 }
-                
+                //----------------------------------------------------------------------
+                matriz[xf][yf] = 2;
+            matriz[xi][yi] = 0;
+            i=xf;
+            j=yf;
+            boolean volver = false;
+            int delta_x1=1,delta_x2=-1,delta_y1=1,delta_y2=-1;
+            if(a){
+                while(i < 8 && j < 8 && !volver){
+                    int eval=0;
+                    if(((i+delta_x1<8)&&(j+delta_y1<8))){
+                        eval=matriz[i+delta_x1][j+delta_y1];
+                    }
+                    if(eval!=0&&((eval==3)||(eval==4))){
+                        if(((i+(delta_x1+1)<8)&&(j+(delta_y1+1)<8))&&(matriz[i+delta_x1+1][j+delta_y1+1]==0)){
+                            volver = true;
+                        }
+                    }
+                    i=i+delta_x1;
+                    j=j+delta_y1;
+                }
+                i=xf;
+                j=yf;
+                while(i<8&&j>0&&!volver){
+                    int eval=0;
+                    if(((i+delta_x1<8)&&(j+delta_y2>=0))){
+                        eval=matriz[i+delta_x1][j+delta_y2];
+                    }
+                    if(eval!=0&&((eval==3)||(eval==4))){
+                        if(((i+(delta_x1+1)<8)&&(j+(delta_y2+1)>=0))&&(matriz[i+delta_x1+1][j+delta_y2+1]==0)){
+                            volver = true;
+                        }
+                    }
+                    i=i+delta_x1;
+                    j=j+delta_y2;
+                }
+                i=xf;
+                j=yf;
+                while(i>=0&&j<8&&!volver){
+                    int eval=0;
+                    if(((i+delta_x2>=0)&&(j+delta_y1<8))){
+                        eval=matriz[i+delta_x2][j+delta_y1];
+                    }
+                    if(eval!=0&&((eval==3)||(eval==4))){
+                        if(((i+(delta_x2+1)>=0)&&(j+(delta_y1+1)<8))&&(matriz[i+delta_x2+1][j+delta_y1+1]==0)){
+                            volver = true;
+                        }
+                    }
+                    i=i+delta_x2;
+                    j=j+delta_y1;
+                }
+                i=xf;
+                j=yf;
+                while(i>0&&j>0&&!volver){
+                    int eval=0;
+                    if(((i+delta_x2>=0)&&(j+delta_y2>=0))){
+                        eval=matriz[i+delta_x2][j+delta_y2];
+                    }
+                    if(eval!=0&&((eval==3)||(eval==4))){
+                        if(((i+(delta_x2+1)>=0)&&(j+(delta_y2+1)>=0))&&(matriz[i+delta_x2+1][j+delta_y2+1]==0)){
+                            volver = true;
+                        }
+                    }
+                    i=i+delta_x2;
+                    j=j+delta_y2;
+                }
+            }
+            if(!volver){
+                turno++;
+            }else{
+                jDoble=true;
+                guardaJugadaX = xf;
+                guardaJugadaY = yf;
+            }
             }
             
             if(numNegras == 0){
@@ -369,18 +447,6 @@ public class Juego {
                 s = "";
                 Damas.jugadas.setText("");
                 return true;
-            }
-            matriz[xf][yf] = 2;
-            matriz[xi][yi] = 0;
-            if(((xf-2 >= 0 && xf+2<=7 && yf-2 >= 0 && yf+2<=7))&&
-               ((matriz[xf-1][yf+1]!=0) && (matriz[xf-2][yf+2]==0)||((matriz[xf-1][yf-1]!=0) && (matriz[xf-2][yf-2]==0)))){
-                //Al efectuar validaciones la ficha tiene la posibilidad de mover doble
-            }else if (((xf+2 >= 0 && xf+2<=7 && yf-2 >= 0 && yf+2<=7))&&(((matriz[xf+1][yf+1]!=0) && (matriz[xf+2][yf+2]==0))||((matriz[xf+1][yf-1]!=0) && (matriz[xf+2][yf-2]==0)))){
-                //Al efectuar validaciones la ficha tiene la posibilidad de mover doble
-            }
-            else{
-                turno++;
-                //inteligencia();
             }
             if(a){
                 s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " ||| " + c + "," + d +  " C" + "\n";
@@ -393,7 +459,7 @@ public class Juego {
         }
         
         
-        if(tipo == 3){
+        /*if(tipo == 3){
             if(Math.abs(xf - xi) == 0 && Math.abs(yf - yi) == 0){
                 valida = false;
                 throw new Exception("Debe moverse.");
@@ -590,7 +656,7 @@ public class Juego {
             }
             s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
             Damas.jugadas.setText(s);
-        }
+        }*/
         return valida;
     }
     public void calcularJugada(int mat[][]){
@@ -696,6 +762,37 @@ public class Juego {
                                 matriz[i][j] = 0;
                                 matriz[i + 2*di][j + 2*dj] = tipo;
                                 matriz[i+di][j+dj] = 0;
+                                //ojo
+                                int xf = i + 2*di;
+                                int yf = j + 2*dj;
+                                boolean hizo = false;
+                                if(tipo == 3 && xf + 2 <= 7 && yf + 2 <= 7  && matriz[xf + 1][yf + 1] <= 2 && matriz[xf + 2][yf + 2] == 0 ){
+                                  hizo = true;
+                                  matriz[xf][yf] = 0;
+                                  matriz[xf + 1][yf + 1] = 0;
+                                  matriz[xf + 2][yf + 2] = 3;
+                                  s += "Máquina:" + (-i+8) + "," + (j+1) + " a " + (-(xf + 2)+8) + "," + (yf + 2 + 1) + " ||| " + (-(xf + 1) + 8) + "," + (yf + 1 + 1) + " CC!" +  "\n";
+                                  Damas.jugadas.setText(s);
+                                  if(xf + 2 == 7){
+                                      matriz[xf + 2][yf + 2] = 4;
+                                      s += "Máquina:" + (-i+8) + "," + (j+1) + " ||| R!" +  "\n";
+                                      Damas.jugadas.setText(s);
+                                  }
+                                }
+                                if(!hizo && tipo == 3 && xf + 2 <= 7 && yf - 2 >= 0  && matriz[xf + 1][yf - 1] <= 2 && matriz[xf + 2][yf - 2] == 0 ){
+                                  hizo = true;
+                                  matriz[xf][yf] = 0;
+                                  matriz[xf + 1][yf - 1] = 0;
+                                  matriz[xf + 2][yf - 2] = 3;
+                                  s += "Máquina:" + (-i+8) + "," + (j+1) + " a " + (-(xf + 2)+8) + "," + (yf - 2 + 1) + " ||| " + (-(xf + 1) + 8) + "," + (yf - 1 + 1) + " CC!" +  "\n";
+                                  Damas.jugadas.setText(s);
+                                  if(xf + 2 == 7){
+                                      matriz[xf + 2][yf - 2] = 4;
+                                      s += "Máquina:" + (-i+8) + "," + (j+1) + " ||| R!" +  "\n";
+                                      Damas.jugadas.setText(s);
+                                  }
+                                }
+                                //ojo hasta aca.
                                 turno++;
                                 if(i + 2*di == 7 ){
                                     matriz[i + 2*di][j + 2*dj] = 4;
@@ -1313,10 +1410,12 @@ public class Juego {
                     }else{
                         if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             matriz[x][y] = 0;
-                            matriz[xf - dx][yf - dy] = 4;
+                            //OJO!!!!!!!!!!!!!
+                            System.out.println("Entre al caso 1!!!");
+                            matriz[xf - dx - 1][yf - dy - 1] = 4;
                             turno++;
                             boolean si = false;
-                            if(xcomer > 0 || ycomer > 0){
+                            if((xcomer > 0 || ycomer > 0) && m > 0){ //OJOTE!!!!
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
                                 if(numBlancas == 0){
@@ -1476,10 +1575,12 @@ public class Juego {
                     }else{
                         if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             matriz[x][y] = 0;
-                            matriz[xf - dx][yf - dy] = 4;
+                            //OJO!!!
+                            System.out.println("Este es el caso 2!!!");
+                            matriz[xf - dx + 1][yf - dy + 1] = 4;
                             turno++;
                             boolean si = false;
-                            if(xcomer > 0 || ycomer > 0){
+                            if((xcomer > 0 || ycomer > 0) && m > 0){//OJOTE!!!
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
                                 if(numBlancas == 0){
@@ -1638,10 +1739,12 @@ public class Juego {
                     }else{
                         if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             matriz[x][y] = 0;
-                            matriz[xf - dx][yf - dy] = 4;
+                            //OJO!!!
+                            System.out.println("Este es el caso 3!!!");
+                            matriz[xf - dx - 1][yf - dy + 1] = 4;
                             turno++;
                             boolean si = false;
-                            if(xcomer > 0 || ycomer > 0){
+                            if((xcomer > 0 || ycomer > 0) && m > 0){//OJOTE!!!
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
                                 if(numBlancas == 0){
@@ -1801,10 +1904,12 @@ public class Juego {
                     }else{
                         if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             matriz[x][y] = 0;
-                            matriz[xf - dx][yf - dy] = 4;
+                            //ojo!!!
+                            System.out.println("Entre al caso 4!!!");
+                            matriz[xf - dx + 1][yf - dy - 1] = 4;
                             turno++;
                             boolean si = false;
-                            if(xcomer > 0 || ycomer > 0){
+                            if((xcomer > 0 || ycomer > 0)&& m > 0){//OJOTE!!!!!!!
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
                                 if(numBlancas == 0){
