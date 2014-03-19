@@ -117,14 +117,14 @@ public class Juego {
                    }else if (cambioY == 2){
                        if(matriz[piX-1][piY+1]==1 || matriz[piX-1][piY+1]==2){
                            jDoble=true;
-                           throw new Exception("Para volver a jugar debe comer.");
+                           throw new Exception("No puede saltar fichas de su equipo.");
                        }else{
                            jDoble=false;
                        }
                    }else{
                        if(matriz[piX-1][piY-1]==1 || matriz[piX-1][piY-1]==2){
                            jDoble=true;
-                           throw new Exception("Para volver a jugar debe comer.");
+                           throw new Exception("No puede saltar fichas de su equipo.");
                        }else{
                            jDoble=false;
                        }
@@ -138,7 +138,8 @@ public class Juego {
                        jDoble=false;
                    }
                    int k = piX-1;
-                   int l = piY+cambioY;
+                   //OJO
+                   int l = piY+(cambioY/Math.abs(cambioY));
                    boolean mult=false;
                    if(cambioX < 0){
                         while(k > pfX && !mult){
@@ -146,21 +147,21 @@ public class Juego {
                                 mult = true;
                             }
                             k--;
-                            l = l + cambioY;
+                            l = l + (cambioY/Math.abs(cambioY));
                         }
                         if(!mult){
                             jDoble = true;
                             throw new Exception("Solo puede Jugar para volver a comer.");
                         }
-                   }else{
+                   }else if(cambioX > 0){
                        k=piX+1;
-                       l = piY+cambioY;
+                       l = piY+(cambioY/Math.abs(cambioY));
                        while(k < pfX && !mult){
                             if(matriz[k][l]>2){
                                 mult = true;
                             }
                             k++;
-                            l = l + cambioY;
+                            l = l + (cambioY/Math.abs(cambioY));
                         }
                         if(!mult){
                             jDoble = true;
@@ -234,7 +235,7 @@ public class Juego {
                         matriz[xf][yf] = 1;
                         matriz[xi][yi] = 0;
                         matriz[xf + 1][yaux] = 0;
-                        if(((xf-2 >= 0 && (yf-2 >= 0 || yf+2 <= 7)))&&(yf+2 <= 7&&(matriz[xf-1][yf+1]!=0) && (matriz[xf-2][yf+2]==0)||(yf-2 >= 0&&(matriz[xf-1][yf-1]!=0) && (matriz[xf-2][yf-2]==0)))){
+                        if(((xf-2 >= 0 && (yf-2 >= 0 || yf+2 <= 7)))&&(yf+2 <= 7&&(matriz[xf-1][yf+1] >= 3) && (matriz[xf-2][yf+2]==0)||(yf-2 >= 0&&(matriz[xf-1][yf-1] >= 3) && (matriz[xf-2][yf-2]==0)))){
                             //Al efectuar validaciones la ficha tiene la posibilidad de mover doble
                             jDoble=true;
                             guardaJugadaX = xf;
@@ -363,20 +364,21 @@ public class Juego {
                     d = posy;
                     numNegras--;
                 }
-                //----------------------------------------------------------------------
-                matriz[xf][yf] = 2;
+           //----------------------------------------------------------------------
+            matriz[xf][yf] = 2;
             matriz[xi][yi] = 0;
             i=xf;
             j=yf;
             boolean volver = false;
             int delta_x1=1,delta_x2=-1,delta_y1=1,delta_y2=-1;
             if(a){
+                //abajo a la derecha
                 while(i < 8 && j < 8 && !volver){
                     int eval=0;
                     if(((i+delta_x1<8)&&(j+delta_y1<8))){
                         eval=matriz[i+delta_x1][j+delta_y1];
                     }
-                    if(eval!=0&&((eval==3)||(eval==4))){
+                    if(eval >= 3){
                         if(((i+(delta_x1+1)<8)&&(j+(delta_y1+1)<8))&&(matriz[i+delta_x1+1][j+delta_y1+1]==0)){
                             volver = true;
                         }
@@ -386,13 +388,14 @@ public class Juego {
                 }
                 i=xf;
                 j=yf;
-                while(i<8&&j>0&&!volver){
+                //abajo a la izquierda
+                while(i<8 && j >= 0 && !volver){
                     int eval=0;
                     if(((i+delta_x1<8)&&(j+delta_y2>=0))){
                         eval=matriz[i+delta_x1][j+delta_y2];
                     }
-                    if(eval!=0&&((eval==3)||(eval==4))){
-                        if(((i+(delta_x1+1)<8)&&(j+(delta_y2+1)>=0))&&(matriz[i+delta_x1+1][j+delta_y2+1]==0)){
+                    if(eval >= 3){
+                        if(((i+(delta_x1+1)<8)&&(j+(delta_y2-1)>=0))&&(matriz[i+delta_x1+1][j+delta_y2-1]==0)){
                             volver = true;
                         }
                     }
@@ -401,13 +404,14 @@ public class Juego {
                 }
                 i=xf;
                 j=yf;
+                //arriba a la derecha
                 while(i>=0&&j<8&&!volver){
                     int eval=0;
                     if(((i+delta_x2>=0)&&(j+delta_y1<8))){
                         eval=matriz[i+delta_x2][j+delta_y1];
                     }
-                    if(eval!=0&&((eval==3)||(eval==4))){
-                        if(((i+(delta_x2+1)>=0)&&(j+(delta_y1+1)<8))&&(matriz[i+delta_x2+1][j+delta_y1+1]==0)){
+                    if(eval >= 3){
+                        if(((i+(delta_x2-1)>=0)&&(j+(delta_y1+1)<8))&&(matriz[i+delta_x2-1][j+delta_y1+1]==0)){
                             volver = true;
                         }
                     }
@@ -416,13 +420,14 @@ public class Juego {
                 }
                 i=xf;
                 j=yf;
-                while(i>0&&j>0&&!volver){
+                //arriba a la izquierda
+                while(i >= 0 && j >= 0 && !volver){
                     int eval=0;
                     if(((i+delta_x2>=0)&&(j+delta_y2>=0))){
                         eval=matriz[i+delta_x2][j+delta_y2];
                     }
-                    if(eval!=0&&((eval==3)||(eval==4))){
-                        if(((i+(delta_x2+1)>=0)&&(j+(delta_y2+1)>=0))&&(matriz[i+delta_x2+1][j+delta_y2+1]==0)){
+                    if(eval >= 3){
+                        if(((i+(delta_x2 - 1)>=0)&&(j+(delta_y2 - 1)>=0))&&(matriz[i+delta_x2-1][j+delta_y2-1]==0)){
                             volver = true;
                         }
                     }
@@ -459,7 +464,7 @@ public class Juego {
         }
         
         
-        /*if(tipo == 3){
+        if(tipo == 3){
             if(Math.abs(xf - xi) == 0 && Math.abs(yf - yi) == 0){
                 valida = false;
                 throw new Exception("Debe moverse.");
@@ -656,7 +661,7 @@ public class Juego {
             }
             s += "Máquina:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
             Damas.jugadas.setText(s);
-        }*/
+        }
         return valida;
     }
     public void calcularJugada(int mat[][]){
@@ -927,7 +932,6 @@ public class Juego {
             
             int posx, posy, azar;
             azar = ((int)Math.round(Math.random()*(numNegras - 1)));
-            System.out.println("Azar es : " + azar);
             String ubicacion = arr[azar];
             posx = Integer.parseInt(ubicacion.charAt(0) + "");
             posy = Integer.parseInt(ubicacion.charAt(1) + "");
