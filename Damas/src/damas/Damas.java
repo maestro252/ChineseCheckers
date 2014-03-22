@@ -11,6 +11,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+//import org.jvnet.substance.*;
+//import org.jvnet.substance.watermark.*;
 
 /**
  *
@@ -46,11 +48,14 @@ public class Damas extends JFrame implements ActionListener{
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//para que el programa se desvanezca del todo de la memoria del computador
     	getContentPane().setBackground(new Color(Integer.parseInt("a8b2b3", 16)));//Cambiar color de fondo del JFrame
     	getContentPane().setLayout(null);
+        JFrame.setDefaultLookAndFeelDecorated(true);
+  	//SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.OfficeSilver2007Skin");
+  		
         
         tablero = new JButton[8][8];
         
         PanelTablero = new JPanel(new GridLayout(8,8));
-        PanelTablero.setBounds(0,0,640,640);
+        PanelTablero.setBounds(16,16,640,640);
         PanelTablero.setBorder(BorderFactory.createLineBorder(Color.black));
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
@@ -132,7 +137,7 @@ public class Damas extends JFrame implements ActionListener{
         getContentPane().add(PanelOpc);
         
         btnRendirse = new JButton("Rendirse");
-        btnRendirse.setBounds(670, 600, 100, 27);
+        btnRendirse.setBounds(760, 595, 110, 47);
         btnRendirse.addActionListener(this);
         getContentPane().add(btnRendirse);
         
