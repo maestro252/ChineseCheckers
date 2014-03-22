@@ -26,10 +26,10 @@ public class Damas extends JFrame implements ActionListener{
     JButton tablero[][];
     JPanel PanelTablero, PanelOpc;
     JScrollPane ScrollTable;
-    ImageIcon negra = new ImageIcon("src//images//fNegra.png");
-    ImageIcon blanca = new ImageIcon("src//images//fBlanca.png");
+    ImageIcon negra = new ImageIcon("src//images//fichaNegra.png");
+    ImageIcon blanca = new ImageIcon("src//images//fichaBlanca1.png");
     ImageIcon blancaR = new ImageIcon("src//images//fBlancaR.png");
-    ImageIcon negraR = new ImageIcon("src//images//fNegraR.png");
+    ImageIcon negraR = new ImageIcon("src//images//fichaNReina.png");
     JButton ensayo;
     Juego matriz;
     Juego maquina;
@@ -185,13 +185,13 @@ public class Damas extends JFrame implements ActionListener{
             
             if(tablero[i][j].getIcon()!=null){
                     text = tablero[i][j].getIcon().toString();
-                    if(text.equals("src//images//fNegra.png")){
+                    if(text.equals("src//images//fichaNegra.png")){
                         tipo = 3;
                     }
-                    else if(text.equals("src//images//fNegraR.png")){
+                    else if(text.equals("src//images//fichaNReina.png")){
                         tipo = 4;
                     }
-                    else if(text.equals("src//images//fBlanca.png")){
+                    else if(text.equals("src//images//fichaBlanca1.png")){
                         tipo = 1;
                     }
                     else if(text.equals("src//images//fBlancaR.png")){

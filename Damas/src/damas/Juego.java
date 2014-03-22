@@ -50,13 +50,13 @@ public class Juego {
             for(int j=0; j<=7; j++){
                 if(tablero[i][j].getIcon()!=null){
                     text = tablero[i][j].getIcon().toString();
-                    if(text.equals("src//images//fNegra.png")){
+                    if(text.equals("src//images//fichaNegra.png")){
                         matriz[i][j] = 3;
                     }
-                    else if(text.equals("src//images//fNegraR.png")){
+                    else if(text.equals("src//images//fichaNReina.png")){
                         matriz[i][j] = 4;
                     }
-                    else if(text.equals("src//images//fBlanca.png")){
+                    else if(text.equals("src//images//fichaBlanca1.png")){
                         matriz[i][j] = 1;
                     }
                     else if(text.equals("src//images//fBlancaR.png")){
@@ -819,11 +819,6 @@ public class Juego {
         return puede;
     }
     public void inteligencia(){
-        try {
-            Thread.sleep(800);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Juego.class.getName()).log(Level.SEVERE, null, ex);
-        }
         if(turno % 2 == 0){
             return;
         }
@@ -954,14 +949,12 @@ public class Juego {
                         
                     }
                     azar = ((int)Math.round(Math.random()*(numNegras - 1)));
-                    System.out.println("Azar es : " + azar);
                     ubicacion = arr[azar];
                     posx = Integer.parseInt(ubicacion.charAt(0) + "");
                     posy = Integer.parseInt(ubicacion.charAt(1) + "");
                     tipito = matriz[posx][posy];
                 }else{//Aqui esta el bollo.!!!
                     azar = ((int)Math.round(Math.random()*(numNegras - 1)));
-                    System.out.println("Azar es : " + azar);
                     ubicacion = arr[azar];
                     posx = Integer.parseInt(ubicacion.charAt(0) + "");
                     posy = Integer.parseInt(ubicacion.charAt(1) + "");
