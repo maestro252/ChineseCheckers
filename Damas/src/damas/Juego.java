@@ -138,7 +138,7 @@ public class Juego {
                        jDoble=false;
                    }
                    int k = piX-1;
-                   //OJO
+                   
                    int l = piY+(cambioY/Math.abs(cambioY));
                    boolean mult=false;
                    if(cambioX < 0){
@@ -192,7 +192,7 @@ public class Juego {
                 valida = false;
                 throw new Exception("No se puede quedar quieta.");
             }
-            if(xf > xi){ // ojo antes era menor o igual
+            if(xf > xi){ 
                 valida = false; // las fichas blancas normales solo se pueden mover hacia adelante.
                 throw new Exception("La ficha solo se puede mover hacia adelante, pues no es una Reina.");
             }
@@ -210,7 +210,7 @@ public class Juego {
                     s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + "\n";
                     Damas.jugadas.setText(s);
                     turno++;
-                    //inteligencia();
+                   
                     if(xf == 0){
                         matriz[xf][yf] = 2;
                         s += "Humano:" + (-xi+8) + "," + (yi+1) + " a " + (-xf+8) + "," + (yf + 1) + " R" + "\n";
@@ -286,7 +286,7 @@ public class Juego {
                 valida = false; // las fichas solo se pueden mover en diagonal.
                 throw new Exception("La jugada tiene que ser en diagonal!");
                 
-            }else if(Math.abs(xf - xi) == 1 && Math.abs(yf - yi) == 1){ //si movio una coordenada en x y una en y. ojo decia -1
+            }else if(Math.abs(xf - xi) == 1 && Math.abs(yf - yi) == 1){ //si movio una coordenada en x y una en y. 
                 if(matriz[xf][yf] != 0){
                     valida = false;
                     throw new Exception("La posición de destino esta ocupada, mueva a otra coordenada valida.");
@@ -364,7 +364,7 @@ public class Juego {
                     d = posy;
                     numNegras--;
                 }
-           //----------------------------------------------------------------------
+           
             matriz[xf][yf] = 2;
             matriz[xi][yi] = 0;
             i=xf;
@@ -502,7 +502,7 @@ public class Juego {
                     yaux = yf - 1;
                 }
                 if((matriz[xf-1][yaux]==1 || matriz[xf-1][yaux]==2) && matriz[xf][yf] == 0){
-                    //revisar en que coordernada es en la que se tiene que borrar.
+                  
                     matriz[xi][yi] = 0;
                     matriz[xf][yf] = 3;
                     matriz[xf - 1][yaux] = 0;
@@ -531,7 +531,7 @@ public class Juego {
                     }
                     System.out.println("Felicidades, se ha comida una ficha rival.");
                     System.out.println("Puede hacer otra jugada con esta ficha.");
-                    //cranearse como hacer esto.
+                    
                 }else{
                     valida = false;
                     throw new Exception("La jugada no es valida, hay una ficha de su equipo alli, "
@@ -553,7 +553,7 @@ public class Juego {
                 valida = false; // las fichas solo se pueden mover en diagonal.
                 throw new Exception("La jugada tiene que ser en diagonal!");
                 
-            }else if(Math.abs(xf - xi) == 1 && Math.abs(yf - yi) == 1){ //si movio una coordenada en x y una en y. ojo decia -1
+            }else if(Math.abs(xf - xi) == 1 && Math.abs(yf - yi) == 1){ //si movio una coordenada en x y una en y. 
                 if(matriz[xf][yf] != 0){
                     valida = false;
                     throw new Exception("La posición de destino esta ocupada, mueva a otra coordenada valida.");
@@ -767,7 +767,7 @@ public class Juego {
                                 matriz[i][j] = 0;
                                 matriz[i + 2*di][j + 2*dj] = tipo;
                                 matriz[i+di][j+dj] = 0;
-                                //ojo
+                                
                                 int xf = i + 2*di;
                                 int yf = j + 2*dj;
                                 boolean hizo = false;
@@ -797,7 +797,7 @@ public class Juego {
                                       Damas.jugadas.setText(s);
                                   }
                                 }
-                                //ojo hasta aca.
+                                
                                 turno++;
                                 if(i + 2*di == 7 ){
                                     matriz[i + 2*di][j + 2*dj] = 4;
@@ -836,8 +836,7 @@ public class Juego {
             Damas.jugadas.setText(s);
             
             
-        }else{//aqui va toda la logica del resto de movimientos de la maquina.
-            //ensayar con llamados con booleans por defecto en los metodos de atascamiento.
+        }else{
             boolean atrancado = atrancado(turno);
             if(!atrancado){
                 String g;
@@ -937,7 +936,7 @@ public class Juego {
                     if(movida(tipito, posx, posy, 1, 1, false )){ // se deben hacer las preguntas de si puede comer
                         // porque de poder es mejor que lo haga
                         // en el else va la movida sencilla.
-                        //de no tener validas, se escoge otra ficha al azar.
+                        //de no tener validas, se escoge otra ficha.
                         movida(tipito, posx, posy, 1, 1, true);
                         movi = true;
                         
@@ -953,7 +952,7 @@ public class Juego {
                     posx = Integer.parseInt(ubicacion.charAt(0) + "");
                     posy = Integer.parseInt(ubicacion.charAt(1) + "");
                     tipito = matriz[posx][posy];
-                }else{//Aqui esta el bollo.!!!
+                }else{
                     azar = ((int)Math.round(Math.random()*(numNegras - 1)));
                     ubicacion = arr[azar];
                     posx = Integer.parseInt(ubicacion.charAt(0) + "");
@@ -1003,10 +1002,10 @@ public class Juego {
                                 matriz[x][y] = 0;
                                 matriz[xf - 1][yf - 1] = 4;
                                 matriz[xcomer][ycomer] = 0;
-                                //falta turno++ por el caso en que pueda volver a comer.
+                                
                                 turno++;
                                 numBlancas--;
-                                //pantallazo si se acaba el juego.
+                                
                                 return true;
                             }
                         }
@@ -1018,7 +1017,7 @@ public class Juego {
                             if(xcomer > 0 || ycomer > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
-                                //JoptionPane
+                                
                             }
                             return true;
                         }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
@@ -1043,7 +1042,7 @@ public class Juego {
             if(comer && m > 0){
                 matriz[xcomer][ycomer] = 0;
                 numBlancas--;
-                //poner el Joption pane si las blancas son == 0
+               
                 matriz[x][y] = 0;
                 matriz[xf - 1][yf - 1] = 4;
                 turno++;
@@ -1100,7 +1099,7 @@ public class Juego {
                                 matriz[xcomer][ycomer] = 0;
                                 turno++;
                                 numBlancas--;
-                                //pantallazo si se acaba el juego.
+                                
                                 return true;
                             }
                         }
@@ -1112,7 +1111,7 @@ public class Juego {
                             if(xcomer > 0 || ycomer > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
-                                //JoptionPane
+                              
                             }
                             return true;
                         }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
@@ -1137,7 +1136,7 @@ public class Juego {
             if(comer && m > 0){
                 matriz[xcomer][ycomer] = 0;
                 numBlancas--;
-                //poner el Joption pane si las blancas son == 0
+               
                 matriz[x][y] = 0;
                 matriz[xf + 1][yf + 1] = 4;
                 turno++;
@@ -1194,7 +1193,7 @@ public class Juego {
                                 matriz[xcomer][ycomer] = 0;
                                 turno++;
                                 numBlancas--;
-                                //pantallazo si se acaba el juego.
+                                
                                 return true;
                             }
                         }
@@ -1206,7 +1205,7 @@ public class Juego {
                             if(xcomer > 0 || ycomer > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
-                                //JoptionPane
+                                
                             }
                             return true;
                         }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
@@ -1231,7 +1230,6 @@ public class Juego {
             if(comer && m > 0){
                 matriz[xcomer][ycomer] = 0;
                 numBlancas--;
-                //poner el Joption pane si las blancas son == 0
                 matriz[x][y] = 0;
                 matriz[xf - 1][yf + 1] = 4;
                 turno++;
@@ -1288,7 +1286,7 @@ public class Juego {
                                 matriz[xcomer][ycomer] = 0;
                                 turno++;
                                 numBlancas--;
-                                //pantallazo si se acaba el juego.
+                                
                                 return true;
                             }
                         }
@@ -1300,7 +1298,7 @@ public class Juego {
                             if(xcomer > 0 || ycomer > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
-                                //JoptionPane
+                                
                             }
                             return true;
                         }else if(n == 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
@@ -1325,7 +1323,7 @@ public class Juego {
             if(comer && m > 0){
                 matriz[xcomer][ycomer] = 0;
                 numBlancas--;
-                //poner el Joption pane si las blancas son == 0
+                
                 matriz[x][y] = 0;
                 matriz[xf + 1][yf - 1] = 4;
                 turno++;
@@ -1400,19 +1398,19 @@ public class Juego {
                                     Damas.jugadas.setText("");
                                     return true;
                                 }
-                                //pantallazo si se acaba el juego.
+                                
                                 return true;
                             }
                         }
                     }else{
                         if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             matriz[x][y] = 0;
-                            //OJO!!!!!!!!!!!!!
+                            
                             System.out.println("Entre al caso 1!!!");
                             matriz[xf - dx - 1][yf - dy - 1] = 4;
                             turno++;
                             boolean si = false;
-                            if((xcomer > 0 || ycomer > 0) && m > 0){ //OJOTE!!!!
+                            if((xcomer > 0 || ycomer > 0) && m > 0){ 
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
                                 if(numBlancas == 0){
@@ -1425,7 +1423,7 @@ public class Juego {
                                     return true;
                                 }
                                 si = true;
-                                //JoptionPane
+                              
                             }
                             if(si){
                                 s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
@@ -1484,7 +1482,6 @@ public class Juego {
                                     Damas.jugadas.setText("");
                                     return true;
                                 }
-                //poner el Joption pane si las blancas son == 0
                 matriz[x][y] = 0;
                 matriz[xf - 1][yf - 1] = 4;
                 turno++;
@@ -1565,19 +1562,19 @@ public class Juego {
                                 }
                                 s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - 1)+8) + "," + (yf) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
                                 Damas.jugadas.setText(s);
-                                //pantallazo si se acaba el juego.
+                               
                                 return true;
                             }
                         }
                     }else{
                         if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             matriz[x][y] = 0;
-                            //OJO!!!
+                           
                             System.out.println("Este es el caso 2!!!");
                             matriz[xf - dx + 1][yf - dy + 1] = 4;
                             turno++;
                             boolean si = false;
-                            if((xcomer > 0 || ycomer > 0) && m > 0){//OJOTE!!!
+                            if((xcomer > 0 || ycomer > 0) && m > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
                                 if(numBlancas == 0){
@@ -1590,7 +1587,6 @@ public class Juego {
                                     return true;
                                 }
                                 si = true;
-                                //JoptionPane
                             }
                             if(si){
                                 s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
@@ -1649,7 +1645,7 @@ public class Juego {
                                     Damas.jugadas.setText("");
                                     return true;
                                 }
-                //poner el Joption pane si las blancas son == 0
+               
                 matriz[x][y] = 0;
                 matriz[xf + 1][yf + 1] = 4;
                 turno++;
@@ -1729,19 +1725,19 @@ public class Juego {
                                 }
                                 s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
                                 Damas.jugadas.setText(s);
-                                //pantallazo si se acaba el juego.
+                                
                                 return true;
                             }
                         }
                     }else{
                         if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             matriz[x][y] = 0;
-                            //OJO!!!
+                            
                             System.out.println("Este es el caso 3!!!");
                             matriz[xf - dx - 1][yf - dy + 1] = 4;
                             turno++;
                             boolean si = false;
-                            if((xcomer > 0 || ycomer > 0) && m > 0){//OJOTE!!!
+                            if((xcomer > 0 || ycomer > 0) && m > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
                                 if(numBlancas == 0){
@@ -1753,7 +1749,7 @@ public class Juego {
                                     Damas.jugadas.setText("");
                                     return true;
                                 }
-                                //JoptionPane
+                               
                                 si = true;
                             }
                             if(si){
@@ -1813,7 +1809,6 @@ public class Juego {
                                     Damas.jugadas.setText("");
                                     return true;
                                 }
-                //poner el Joption pane si las blancas son == 0
                 matriz[x][y] = 0;
                 matriz[xf - 1][yf + 1] = 4;
                 turno++;
@@ -1894,19 +1889,18 @@ public class Juego {
                                 }
                                  s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
                                  Damas.jugadas.setText(s);
-                                //pantallazo si se acaba el juego.
                                 return true;
                             }
                         }
                     }else{
                         if(n > 0 && (matriz[xf][yf] == 3 || matriz[xf][yf] == 4)){
                             matriz[x][y] = 0;
-                            //ojo!!!
+                            
                             System.out.println("Entre al caso 4!!!");
                             matriz[xf - dx + 1][yf - dy - 1] = 4;
                             turno++;
                             boolean si = false;
-                            if((xcomer > 0 || ycomer > 0)&& m > 0){//OJOTE!!!!!!!
+                            if((xcomer > 0 || ycomer > 0)&& m > 0){
                                 matriz[xcomer][ycomer] = 0;
                                 numBlancas--;
                                 if(numBlancas == 0){
@@ -1919,7 +1913,6 @@ public class Juego {
                                     return true;
                                 }
                                 si = true;
-                                //JoptionPane
                             }
                             if(si){
                                 s += "Máquina:" + (-x+8) + "," + (y+1) + " a " + (-(xf - dx)+8) + "," + (yf - dy + 1) +  " ||| " + (8-xcomer) + "," + (ycomer + 1) + " C" + "\n";
@@ -1979,7 +1972,6 @@ public class Juego {
                                     Damas.jugadas.setText("");
                                     return true;
                                 }
-                //poner el Joption pane si las blancas son == 0
                 matriz[x][y] = 0;
                 matriz[xf + 1][yf - 1] = 4;
                 turno++;
